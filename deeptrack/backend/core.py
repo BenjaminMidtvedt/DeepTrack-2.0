@@ -174,12 +174,14 @@ class DeepTrackNode:
         return self.data.valid_index(replicate_index)
 
     def invalidate(self, replicate_index=None):
+        self.data[replicate_index].invalidate()
         for child in self.recurse_children():
             if child.valid_index(replicate_index):
                 child.data[replicate_index].invalidate()
         return self
 
     def validate(self, replicate_index=None):
+        self.data[replicate_index].validate()
         for child in self.recurse_children():
             if child.valid_index(replicate_index):
                 child.data[replicate_index].validate()

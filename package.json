@@ -4,6 +4,7 @@
     "make-docs-windows": "cd _src && make html && Xcopy /Y /I /E .\\build\\html ..\\docs && type nul > ../docs/.nojekyll",
     "full-make-docs-windows": "cd _src && py .\\autodoc_dt.py && make html && Xcopy /Y /I /E .\\build\\html ..\\docs && type nul > ../docs/.nojekyll",
     "test": "set TF_CPP_MIN_LOG_LEVEL=2 && py -W ignore -m unittest discover",
-    "benchmark": "python -m pytest"
+    "benchmark": "python -m pytest",
+    "benchmark:forces": "python -m pytest ./deeptrack/benchmarks/test_forces.py --benchmark-autosave --benchmark-compare"
   }
 }
