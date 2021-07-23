@@ -5,57 +5,33 @@ import deeptrack.dynamics as dyn
 import numpy as np
 import matplotlib.pyplot as plt
 
-universe = dyn.universe.Universe(0)
+universe =dyn.universe.Universe(0)
 
-
-def on_simulation_start():
-
-    plt.figure()
-
-    universe.atoms = []
-
-    universe.add_atom(
-        dt.PointParticle(
-            position=np.array((32, 32)),
-            velocity=np.array((-2, 0.02)),
-            acceleration=0,
-            force=lambda: 0,
-            mass=2,
-            sigma=1,
-            epsilon=1,
+def on_simulation_begin():
+    # np.random.seed(0)
+    for i in range(1):
+        x = i // 5
+        y = i % 5
+        universe.add_atom(
+            dt.PointParticle(
+                position=np.array((x, y)),
+                velocity=np.random.randn(2),
+                acceleration=0,
+                force=0,
+                mass=2,
+                sigma=0.5,
+                epsilon=1,
+            )
         )
-    )
 
-    universe.add_atom(
-        dt.PointParticle(
-            position=np.array((28, 32)),
-            velocity=np.array((2, 0.02)),
-            acceleration=0,
-            force=lambda: 0,
-            mass=1,
-            sigma=1,
-            epsilon=1,
-        )
-    )
+universe.on_simulation_begin = on_simulation_begin
 
-
-def on_frame_begin():
-    for atom in universe.atoms:
-        plt.scatter(*atom.position())
-
-
-def on_simulation_end():
-    plt.show()
-
-
-universe.on_simulation_begin = on_simulation_start
-universe.on_frame_start = on_frame_begin
-universe.on_simulation_end = on_simulation_end
+universe.run(0.5, 0.01)
 
 
 #%%
 
-universe.run(2, 0.02)
+%timeit universe.run(0.01, 0.01)
 
 #%%
 

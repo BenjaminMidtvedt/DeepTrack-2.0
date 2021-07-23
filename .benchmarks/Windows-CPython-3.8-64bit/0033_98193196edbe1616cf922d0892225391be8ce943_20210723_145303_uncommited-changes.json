@@ -1,0 +1,923 @@
+{
+    "machine_info": {
+        "node": "DESKTOP-BTQK41F",
+        "processor": "Intel64 Family 6 Model 165 Stepping 5, GenuineIntel",
+        "machine": "AMD64",
+        "python_compiler": "MSC v.1927 64 bit (AMD64)",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.8.6",
+        "python_version": "3.8.6",
+        "python_build": [
+            "tags/v3.8.6:db45529",
+            "Sep 23 2020 15:52:53"
+        ],
+        "release": "10",
+        "system": "Windows",
+        "cpu": {
+            "python_version": "3.8.6.final.0 (64 bit)",
+            "cpuinfo_version": [
+                8,
+                0,
+                0
+            ],
+            "cpuinfo_version_string": "8.0.0",
+            "arch": "X86_64",
+            "bits": 64,
+            "count": 20,
+            "arch_string_raw": "AMD64",
+            "vendor_id_raw": "GenuineIntel",
+            "brand_raw": "Intel(R) Core(TM) i9-10900KF CPU @ 3.70GHz",
+            "hz_advertised_friendly": "3.7000 GHz",
+            "hz_actual_friendly": "3.6960 GHz",
+            "hz_advertised": [
+                3700000000,
+                0
+            ],
+            "hz_actual": [
+                3696000000,
+                0
+            ],
+            "l2_cache_size": 2621440,
+            "stepping": 5,
+            "model": 165,
+            "family": 6,
+            "l3_cache_size": 20971520,
+            "flags": [
+                "3dnow",
+                "3dnowprefetch",
+                "abm",
+                "acpi",
+                "adx",
+                "aes",
+                "apic",
+                "avx",
+                "avx2",
+                "bmi1",
+                "bmi2",
+                "clflush",
+                "clflushopt",
+                "cmov",
+                "cx16",
+                "cx8",
+                "de",
+                "dtes64",
+                "dts",
+                "erms",
+                "est",
+                "f16c",
+                "fma",
+                "fpu",
+                "fxsr",
+                "ht",
+                "hypervisor",
+                "ia64",
+                "invpcid",
+                "lahf_lm",
+                "mca",
+                "mce",
+                "mmx",
+                "movbe",
+                "mpx",
+                "msr",
+                "mtrr",
+                "osxsave",
+                "pae",
+                "pat",
+                "pbe",
+                "pcid",
+                "pclmulqdq",
+                "pdcm",
+                "pge",
+                "pni",
+                "popcnt",
+                "pse",
+                "pse36",
+                "rdrnd",
+                "rdseed",
+                "sep",
+                "serial",
+                "smap",
+                "smep",
+                "ss",
+                "sse",
+                "sse2",
+                "sse4_1",
+                "sse4_2",
+                "ssse3",
+                "tm",
+                "tm2",
+                "tsc",
+                "vme",
+                "x2apic",
+                "xsave",
+                "xtpr"
+            ],
+            "l2_cache_line_size": 256,
+            "l2_cache_associativity": 6
+        }
+    },
+    "commit_info": {
+        "id": "98193196edbe1616cf922d0892225391be8ce943",
+        "time": "2021-07-22T18:07:51+02:00",
+        "author_time": "2021-07-22T18:07:51+02:00",
+        "dirty": true,
+        "project": "DeepTrack-2.0",
+        "branch": "bm/molecular_dynamics"
+    },
+    "benchmarks": [
+        {
+            "group": "VelocityVerlet 1 particles",
+            "name": "test_VelocityVerlet[1]",
+            "fullname": "deeptrack/benchmarks/test_integration.py::test_VelocityVerlet[1]",
+            "params": {
+                "num_particles": 1
+            },
+            "param": "1",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "cprofile": [
+                {
+                    "ncalls_recursion": "1",
+                    "ncalls": 1,
+                    "tottime": 9.000000000000001e-07,
+                    "tottime_per": 9.000000000000001e-07,
+                    "cumtime": 0.0051592,
+                    "cumtime_per": 0.0051592,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\benchmarks\\test_integration.py:41(<lambda>)"
+                },
+                {
+                    "ncalls_recursion": "1",
+                    "ncalls": 1,
+                    "tottime": 5.0600000000000003e-05,
+                    "tottime_per": 5.0600000000000003e-05,
+                    "cumtime": 0.0051583,
+                    "cumtime_per": 0.0051583,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\universe.py:35(run)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 6.46e-05,
+                    "tottime_per": 1.2919999999999999e-06,
+                    "cumtime": 0.0049322,
+                    "cumtime_per": 9.8644e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:9(step)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.00026220000000000003,
+                    "tottime_per": 5.244000000000001e-06,
+                    "cumtime": 0.0023742000000000004,
+                    "cumtime_per": 4.748400000000001e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:39(update_velocity)"
+                },
+                {
+                    "ncalls_recursion": "450",
+                    "ncalls": 450,
+                    "tottime": 0.00028950000000000004,
+                    "tottime_per": 6.433333333333335e-07,
+                    "cumtime": 0.0021108,
+                    "cumtime_per": 4.690666666666666e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:253(__call__)"
+                },
+                {
+                    "ncalls_recursion": "150",
+                    "ncalls": 150,
+                    "tottime": 0.00020820000000000002,
+                    "tottime_per": 1.388e-06,
+                    "cumtime": 0.0015365,
+                    "cumtime_per": 1.0243333333333334e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:200(set_value)"
+                },
+                {
+                    "ncalls_recursion": "200",
+                    "ncalls": 200,
+                    "tottime": 0.0003756,
+                    "tottime_per": 1.878e-06,
+                    "cumtime": 0.0012355,
+                    "cumtime_per": 6.1775000000000006e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:176(invalidate)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.00026920000000000004,
+                    "tottime_per": 5.3840000000000005e-06,
+                    "cumtime": 0.001227,
+                    "cumtime_per": 2.454e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:15(update_position)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 5.4300000000000005e-05,
+                    "tottime_per": 1.0055555555555556e-06,
+                    "cumtime": 0.0010195,
+                    "cumtime_per": 1.887962962962963e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\utils.py:141(safe_call)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 5.0100000000000005e-05,
+                    "tottime_per": 9.277777777777778e-07,
+                    "cumtime": 0.0009596,
+                    "cumtime_per": 1.777037037037037e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\utils.py:88(get_kwarg_names)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 0.00018460000000000001,
+                    "tottime_per": 3.418518518518519e-06,
+                    "cumtime": 0.0009095,
+                    "cumtime_per": 1.6842592592592593e-05,
+                    "function_name": "C:\\Users\\GU\\AppData\\Local\\Programs\\Python\\Python38\\lib\\inspect.py:1090(getfullargspec)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.00011580000000000001,
+                    "tottime_per": 2.3160000000000004e-06,
+                    "cumtime": 0.0008689,
+                    "cumtime_per": 1.7378000000000002e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:48(update_acceleration)"
+                },
+                {
+                    "ncalls_recursion": "600",
+                    "ncalls": 600,
+                    "tottime": 0.00032710000000000004,
+                    "tottime_per": 5.451666666666667e-07,
+                    "cumtime": 0.0006438,
+                    "cumtime_per": 1.0730000000000001e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:167(is_valid)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 0.00010760000000000001,
+                    "tottime_per": 1.9925925925925927e-06,
+                    "cumtime": 0.0006412000000000001,
+                    "cumtime_per": 1.1874074074074076e-05,
+                    "function_name": "C:\\Users\\GU\\AppData\\Local\\Programs\\Python\\Python38\\lib\\inspect.py:2206(_signature_from_callable)"
+                },
+                {
+                    "ncalls_recursion": "1800/800",
+                    "ncalls": 1800,
+                    "tottime": 0.000517,
+                    "tottime_per": 6.4625e-07,
+                    "cumtime": 0.0005627000000000001,
+                    "cumtime_per": 7.033750000000001e-07,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:217(recurse_children)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 0.00022710000000000002,
+                    "tottime_per": 4.205555555555556e-06,
+                    "cumtime": 0.000504,
+                    "cumtime_per": 9.333333333333333e-06,
+                    "function_name": "C:\\Users\\GU\\AppData\\Local\\Programs\\Python\\Python38\\lib\\inspect.py:2112(_signature_from_function)"
+                },
+                {
+                    "ncalls_recursion": "1200",
+                    "ncalls": 1200,
+                    "tottime": 0.00028030000000000004,
+                    "tottime_per": 2.3358333333333338e-07,
+                    "cumtime": 0.0004153,
+                    "cumtime_per": 3.4608333333333336e-07,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:172(valid_index)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 4.07e-05,
+                    "tottime_per": 8.14e-07,
+                    "cumtime": 0.0003975,
+                    "cumtime_per": 7.95e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:21(update_force)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 4.44e-05,
+                    "tottime_per": 8.88e-07,
+                    "cumtime": 0.0003568,
+                    "cumtime_per": 7.136e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:23(<listcomp>)"
+                },
+                {
+                    "ncalls_recursion": "450",
+                    "ncalls": 450,
+                    "tottime": 0.00016260000000000002,
+                    "tottime_per": 3.613333333333334e-07,
+                    "cumtime": 0.0002473,
+                    "cumtime_per": 5.495555555555555e-07,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:261(current_value)"
+                },
+                {
+                    "ncalls_recursion": "204",
+                    "ncalls": 204,
+                    "tottime": 0.0001321,
+                    "tottime_per": 6.475490196078432e-07,
+                    "cumtime": 0.0002212,
+                    "cumtime_per": 1.084313725490196e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:160(store)"
+                },
+                {
+                    "ncalls_recursion": "657",
+                    "ncalls": 657,
+                    "tottime": 0.00019280000000000002,
+                    "tottime_per": 2.93455098934551e-07,
+                    "cumtime": 0.00019280000000000002,
+                    "cumtime_per": 2.93455098934551e-07,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\features.py:458(__getattr__)"
+                },
+                {
+                    "ncalls_recursion": "1800",
+                    "ncalls": 1800,
+                    "tottime": 0.0001874,
+                    "tottime_per": 1.0411111111111111e-07,
+                    "cumtime": 0.0001884,
+                    "cumtime_per": 1.0466666666666666e-07,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:72(__getitem__)"
+                },
+                {
+                    "ncalls_recursion": "1",
+                    "ncalls": 1,
+                    "tottime": 9e-06,
+                    "tottime_per": 9e-06,
+                    "cumtime": 0.00016590000000000002,
+                    "cumtime_per": 0.00016590000000000002,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\benchmarks\\test_integration.py:19(on_simulation_begin)"
+                },
+                {
+                    "ncalls_recursion": "1",
+                    "ncalls": 1,
+                    "tottime": 4.3e-06,
+                    "tottime_per": 4.3e-06,
+                    "cumtime": 0.0001419,
+                    "cumtime_per": 0.0001419,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\scatterers.py:197(__init__)"
+                }
+            ],
+            "stats": {
+                "min": 0.002195500000000017,
+                "max": 0.0026153999999998234,
+                "mean": 0.002246772553699315,
+                "stddev": 4.650707191083962e-05,
+                "rounds": 419,
+                "median": 0.0022301000000002347,
+                "iqr": 4.479999999973394e-05,
+                "q1": 0.0022201250000004613,
+                "q3": 0.0022649250000001953,
+                "iqr_outliers": 20,
+                "stddev_outliers": 53,
+                "outliers": "53;20",
+                "ld15iqr": 0.002195500000000017,
+                "hd15iqr": 0.0023404000000004643,
+                "ops": 445.0828804871674,
+                "total": 0.9413977000000129,
+                "iterations": 1
+            }
+        },
+        {
+            "group": "VelocityVerlet 10 particles",
+            "name": "test_VelocityVerlet[10]",
+            "fullname": "deeptrack/benchmarks/test_integration.py::test_VelocityVerlet[10]",
+            "params": {
+                "num_particles": 10
+            },
+            "param": "10",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "cprofile": [
+                {
+                    "ncalls_recursion": "1",
+                    "ncalls": 1,
+                    "tottime": 9.000000000000001e-07,
+                    "tottime_per": 9.000000000000001e-07,
+                    "cumtime": 0.0065198,
+                    "cumtime_per": 0.0065198,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\benchmarks\\test_integration.py:41(<lambda>)"
+                },
+                {
+                    "ncalls_recursion": "1",
+                    "ncalls": 1,
+                    "tottime": 5.0100000000000005e-05,
+                    "tottime_per": 5.0100000000000005e-05,
+                    "cumtime": 0.0065189,
+                    "cumtime_per": 0.0065189,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\universe.py:35(run)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 6.440000000000001e-05,
+                    "tottime_per": 1.2880000000000002e-06,
+                    "cumtime": 0.0049844,
+                    "cumtime_per": 9.9688e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:9(step)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.00026010000000000003,
+                    "tottime_per": 5.202e-06,
+                    "cumtime": 0.0024104,
+                    "cumtime_per": 4.8208e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:39(update_velocity)"
+                },
+                {
+                    "ncalls_recursion": "450",
+                    "ncalls": 450,
+                    "tottime": 0.00029370000000000004,
+                    "tottime_per": 6.526666666666667e-07,
+                    "cumtime": 0.0021514,
+                    "cumtime_per": 4.780888888888889e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:253(__call__)"
+                },
+                {
+                    "ncalls_recursion": "150",
+                    "ncalls": 150,
+                    "tottime": 0.0002086,
+                    "tottime_per": 1.3906666666666667e-06,
+                    "cumtime": 0.0015667,
+                    "cumtime_per": 1.0444666666666667e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:200(set_value)"
+                },
+                {
+                    "ncalls_recursion": "1",
+                    "ncalls": 1,
+                    "tottime": 3.4500000000000005e-05,
+                    "tottime_per": 3.4500000000000005e-05,
+                    "cumtime": 0.0014737,
+                    "cumtime_per": 0.0014737,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\benchmarks\\test_integration.py:19(on_simulation_begin)"
+                },
+                {
+                    "ncalls_recursion": "10",
+                    "ncalls": 10,
+                    "tottime": 2.7400000000000002e-05,
+                    "tottime_per": 2.74e-06,
+                    "cumtime": 0.0013381,
+                    "cumtime_per": 0.00013381,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\scatterers.py:197(__init__)"
+                },
+                {
+                    "ncalls_recursion": "10",
+                    "ncalls": 10,
+                    "tottime": 2.4900000000000002e-05,
+                    "tottime_per": 2.4900000000000003e-06,
+                    "cumtime": 0.0013086,
+                    "cumtime_per": 0.00013086,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\scatterers.py:79(__init__)"
+                },
+                {
+                    "ncalls_recursion": "10",
+                    "ncalls": 10,
+                    "tottime": 5.78e-05,
+                    "tottime_per": 5.7800000000000006e-06,
+                    "cumtime": 0.0012837,
+                    "cumtime_per": 0.00012837,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\features.py:105(__init__)"
+                },
+                {
+                    "ncalls_recursion": "200",
+                    "ncalls": 200,
+                    "tottime": 0.0003845,
+                    "tottime_per": 1.9225000000000002e-06,
+                    "cumtime": 0.0012603,
+                    "cumtime_per": 6.3015e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:176(invalidate)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.00026240000000000004,
+                    "tottime_per": 5.248e-06,
+                    "cumtime": 0.0012467000000000001,
+                    "cumtime_per": 2.4934000000000002e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:15(update_position)"
+                },
+                {
+                    "ncalls_recursion": "10",
+                    "ncalls": 10,
+                    "tottime": 0.00032500000000000004,
+                    "tottime_per": 3.2500000000000004e-05,
+                    "cumtime": 0.0011623,
+                    "cumtime_per": 0.00011623,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\properties.py:133(__init__)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 5.53e-05,
+                    "tottime_per": 1.0240740740740741e-06,
+                    "cumtime": 0.0010417,
+                    "cumtime_per": 1.9290740740740742e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\utils.py:141(safe_call)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 5.03e-05,
+                    "tottime_per": 9.314814814814815e-07,
+                    "cumtime": 0.0009799000000000001,
+                    "cumtime_per": 1.8146296296296298e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\utils.py:88(get_kwarg_names)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 0.0001929,
+                    "tottime_per": 3.5722222222222223e-06,
+                    "cumtime": 0.0009296,
+                    "cumtime_per": 1.7214814814814814e-05,
+                    "function_name": "C:\\Users\\GU\\AppData\\Local\\Programs\\Python\\Python38\\lib\\inspect.py:1090(getfullargspec)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.00010910000000000001,
+                    "tottime_per": 2.182e-06,
+                    "cumtime": 0.000862,
+                    "cumtime_per": 1.724e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:48(update_acceleration)"
+                },
+                {
+                    "ncalls_recursion": "150",
+                    "ncalls": 150,
+                    "tottime": 0.00039460000000000005,
+                    "tottime_per": 2.630666666666667e-06,
+                    "cumtime": 0.0007336,
+                    "cumtime_per": 4.890666666666667e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\properties.py:32(__init__)"
+                },
+                {
+                    "ncalls_recursion": "600",
+                    "ncalls": 600,
+                    "tottime": 0.00033830000000000004,
+                    "tottime_per": 5.638333333333334e-07,
+                    "cumtime": 0.0006569000000000001,
+                    "cumtime_per": 1.0948333333333335e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:167(is_valid)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 0.0001071,
+                    "tottime_per": 1.9833333333333335e-06,
+                    "cumtime": 0.0006514,
+                    "cumtime_per": 1.2062962962962963e-05,
+                    "function_name": "C:\\Users\\GU\\AppData\\Local\\Programs\\Python\\Python38\\lib\\inspect.py:2206(_signature_from_callable)"
+                },
+                {
+                    "ncalls_recursion": "1800/800",
+                    "ncalls": 1800,
+                    "tottime": 0.0005286000000000001,
+                    "tottime_per": 6.607500000000001e-07,
+                    "cumtime": 0.0005738000000000001,
+                    "cumtime_per": 7.172500000000001e-07,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:217(recurse_children)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 0.00022920000000000001,
+                    "tottime_per": 4.244444444444444e-06,
+                    "cumtime": 0.0005153,
+                    "cumtime_per": 9.542592592592592e-06,
+                    "function_name": "C:\\Users\\GU\\AppData\\Local\\Programs\\Python\\Python38\\lib\\inspect.py:2112(_signature_from_function)"
+                },
+                {
+                    "ncalls_recursion": "1200",
+                    "ncalls": 1200,
+                    "tottime": 0.0002898,
+                    "tottime_per": 2.415e-07,
+                    "cumtime": 0.0004268,
+                    "cumtime_per": 3.556666666666667e-07,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:172(valid_index)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 3.93e-05,
+                    "tottime_per": 7.86e-07,
+                    "cumtime": 0.00040090000000000004,
+                    "cumtime_per": 8.018e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:21(update_force)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 4.7300000000000005e-05,
+                    "tottime_per": 9.460000000000001e-07,
+                    "cumtime": 0.0003616,
+                    "cumtime_per": 7.232e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:23(<listcomp>)"
+                }
+            ],
+            "stats": {
+                "min": 0.0029364999999996755,
+                "max": 0.0035292999999994024,
+                "mean": 0.0030899247023809502,
+                "stddev": 8.854735548896817e-05,
+                "rounds": 336,
+                "median": 0.00306414999999971,
+                "iqr": 5.334999999950796e-05,
+                "q1": 0.0030434000000001404,
+                "q3": 0.0030967499999996484,
+                "iqr_outliers": 65,
+                "stddev_outliers": 84,
+                "outliers": "84;65",
+                "ld15iqr": 0.002965400000000784,
+                "hd15iqr": 0.0031877000000006817,
+                "ops": 323.6324817978403,
+                "total": 1.0382146999999993,
+                "iterations": 1
+            }
+        },
+        {
+            "group": "VelocityVerlet 50 particles",
+            "name": "test_VelocityVerlet[50]",
+            "fullname": "deeptrack/benchmarks/test_integration.py::test_VelocityVerlet[50]",
+            "params": {
+                "num_particles": 50
+            },
+            "param": "50",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "cprofile": [
+                {
+                    "ncalls_recursion": "1",
+                    "ncalls": 1,
+                    "tottime": 1.1e-06,
+                    "tottime_per": 1.1e-06,
+                    "cumtime": 0.0121236,
+                    "cumtime_per": 0.0121236,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\benchmarks\\test_integration.py:41(<lambda>)"
+                },
+                {
+                    "ncalls_recursion": "1",
+                    "ncalls": 1,
+                    "tottime": 5.11e-05,
+                    "tottime_per": 5.11e-05,
+                    "cumtime": 0.012122500000000001,
+                    "cumtime_per": 0.012122500000000001,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\universe.py:35(run)"
+                },
+                {
+                    "ncalls_recursion": "1",
+                    "ncalls": 1,
+                    "tottime": 0.0001363,
+                    "tottime_per": 0.0001363,
+                    "cumtime": 0.0071389,
+                    "cumtime_per": 0.0071389,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\benchmarks\\test_integration.py:19(on_simulation_begin)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.000127,
+                    "tottime_per": 2.54e-06,
+                    "cumtime": 0.006557800000000001,
+                    "cumtime_per": 0.000131156,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\scatterers.py:197(__init__)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.0001183,
+                    "tottime_per": 2.366e-06,
+                    "cumtime": 0.0064212,
+                    "cumtime_per": 0.000128424,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\scatterers.py:79(__init__)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.0002656,
+                    "tottime_per": 5.312e-06,
+                    "cumtime": 0.0063029,
+                    "cumtime_per": 0.000126058,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\features.py:105(__init__)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.0015722000000000002,
+                    "tottime_per": 3.1444000000000006e-05,
+                    "cumtime": 0.0057412,
+                    "cumtime_per": 0.000114824,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\properties.py:133(__init__)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 6.230000000000001e-05,
+                    "tottime_per": 1.2460000000000002e-06,
+                    "cumtime": 0.004922500000000001,
+                    "cumtime_per": 9.845000000000001e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:9(step)"
+                },
+                {
+                    "ncalls_recursion": "750",
+                    "ncalls": 750,
+                    "tottime": 0.0018003000000000001,
+                    "tottime_per": 2.4004000000000003e-06,
+                    "cumtime": 0.0036618,
+                    "cumtime_per": 4.8824e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\properties.py:32(__init__)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.0002501,
+                    "tottime_per": 5.0020000000000006e-06,
+                    "cumtime": 0.0023548,
+                    "cumtime_per": 4.7096000000000004e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:39(update_velocity)"
+                },
+                {
+                    "ncalls_recursion": "450",
+                    "ncalls": 450,
+                    "tottime": 0.0003021,
+                    "tottime_per": 6.713333333333333e-07,
+                    "cumtime": 0.0021348,
+                    "cumtime_per": 4.744e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:253(__call__)"
+                },
+                {
+                    "ncalls_recursion": "150",
+                    "ncalls": 150,
+                    "tottime": 0.00020720000000000002,
+                    "tottime_per": 1.3813333333333334e-06,
+                    "cumtime": 0.0015400000000000001,
+                    "cumtime_per": 1.0266666666666668e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:200(set_value)"
+                },
+                {
+                    "ncalls_recursion": "750",
+                    "ncalls": 750,
+                    "tottime": 0.0008807000000000001,
+                    "tottime_per": 1.1742666666666667e-06,
+                    "cumtime": 0.0013284,
+                    "cumtime_per": 1.7711999999999999e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\properties.py:36(create_action)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.0002587,
+                    "tottime_per": 5.174e-06,
+                    "cumtime": 0.0012413,
+                    "cumtime_per": 2.4826000000000003e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:15(update_position)"
+                },
+                {
+                    "ncalls_recursion": "200",
+                    "ncalls": 200,
+                    "tottime": 0.000377,
+                    "tottime_per": 1.885e-06,
+                    "cumtime": 0.0012359,
+                    "cumtime_per": 6.179500000000001e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:176(invalidate)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 5.7300000000000004e-05,
+                    "tottime_per": 1.061111111111111e-06,
+                    "cumtime": 0.0010099,
+                    "cumtime_per": 1.870185185185185e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\utils.py:141(safe_call)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 4.66e-05,
+                    "tottime_per": 8.62962962962963e-07,
+                    "cumtime": 0.0009461000000000001,
+                    "cumtime_per": 1.752037037037037e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\utils.py:88(get_kwarg_names)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 0.0001833,
+                    "tottime_per": 3.3944444444444445e-06,
+                    "cumtime": 0.0008995,
+                    "cumtime_per": 1.6657407407407408e-05,
+                    "function_name": "C:\\Users\\GU\\AppData\\Local\\Programs\\Python\\Python38\\lib\\inspect.py:1090(getfullargspec)"
+                },
+                {
+                    "ncalls_recursion": "50",
+                    "ncalls": 50,
+                    "tottime": 0.0001116,
+                    "tottime_per": 2.232e-06,
+                    "cumtime": 0.0008677,
+                    "cumtime_per": 1.7354e-05,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\dynamics\\integration.py:48(update_acceleration)"
+                },
+                {
+                    "ncalls_recursion": "950",
+                    "ncalls": 950,
+                    "tottime": 0.0005841,
+                    "tottime_per": 6.14842105263158e-07,
+                    "cumtime": 0.0007434000000000001,
+                    "cumtime_per": 7.825263157894738e-07,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:137(__init__)"
+                },
+                {
+                    "ncalls_recursion": "600",
+                    "ncalls": 600,
+                    "tottime": 0.00033600000000000004,
+                    "tottime_per": 5.6e-07,
+                    "cumtime": 0.0006602,
+                    "cumtime_per": 1.1003333333333333e-06,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:167(is_valid)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 0.0001034,
+                    "tottime_per": 1.914814814814815e-06,
+                    "cumtime": 0.0006296,
+                    "cumtime_per": 1.165925925925926e-05,
+                    "function_name": "C:\\Users\\GU\\AppData\\Local\\Programs\\Python\\Python38\\lib\\inspect.py:2206(_signature_from_callable)"
+                },
+                {
+                    "ncalls_recursion": "1800/800",
+                    "ncalls": 1800,
+                    "tottime": 0.0005133000000000001,
+                    "tottime_per": 6.416250000000001e-07,
+                    "cumtime": 0.0005588,
+                    "cumtime_per": 6.985000000000001e-07,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:217(recurse_children)"
+                },
+                {
+                    "ncalls_recursion": "54",
+                    "ncalls": 54,
+                    "tottime": 0.000221,
+                    "tottime_per": 4.0925925925925925e-06,
+                    "cumtime": 0.0004972,
+                    "cumtime_per": 9.207407407407408e-06,
+                    "function_name": "C:\\Users\\GU\\AppData\\Local\\Programs\\Python\\Python38\\lib\\inspect.py:2112(_signature_from_function)"
+                },
+                {
+                    "ncalls_recursion": "1200",
+                    "ncalls": 1200,
+                    "tottime": 0.0002833,
+                    "tottime_per": 2.3608333333333333e-07,
+                    "cumtime": 0.00041910000000000005,
+                    "cumtime_per": 3.4925000000000003e-07,
+                    "function_name": "\\DeepTrack-2.0\\deeptrack\\backend\\core.py:172(valid_index)"
+                }
+            ],
+            "stats": {
+                "min": 0.006248400000000487,
+                "max": 0.007508800000000093,
+                "mean": 0.00655213618421056,
+                "stddev": 0.00016146292361372814,
+                "rounds": 152,
+                "median": 0.006507199999999713,
+                "iqr": 0.00020675000000069943,
+                "q1": 0.0064819499999995145,
+                "q3": 0.006688700000000214,
+                "iqr_outliers": 1,
+                "stddev_outliers": 49,
+                "outliers": "49;1",
+                "ld15iqr": 0.006248400000000487,
+                "hd15iqr": 0.007508800000000093,
+                "ops": 152.62198035654626,
+                "total": 0.9959247000000051,
+                "iterations": 1
+            }
+        }
+    ],
+    "datetime": "2021-07-23T14:53:12.171615",
+    "version": "3.4.1"
+}

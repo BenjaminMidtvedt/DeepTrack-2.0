@@ -1,4 +1,4 @@
-from .integration import VelocityVerlet
+from .integration import VelocityVerlet, FastVelocityVerlet
 import numpy as np
 from .. import units as u
 
@@ -15,7 +15,7 @@ class Universe:
         self.on_simulation_begin = lambda: ...
         self.on_simulation_end = lambda: ...
 
-        self.integrator = VelocityVerlet()
+        self.integrator = FastVelocityVerlet()
 
         self.atoms = []
 
