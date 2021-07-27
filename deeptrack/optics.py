@@ -44,10 +44,15 @@ class Microscope(StructuralFeature):
 
     __distributed__ = False
 
-    def __init__(self, sample: Feature, objective: Feature, **kwargs):
+    def __init__(
+        self, sample: Feature, objective: Feature, volume: Feature = None, **kwargs
+    ):
         super().__init__(**kwargs)
         self._sample = self.add_feature(sample)
         self._objective = self.add_feature(objective)
+
+        if volume is not None:
+            self._volume = self.add_feature(volume)
 
     def get(self, image, **kwargs):
 
@@ -74,6 +79,10 @@ class Microscope(StructuralFeature):
         sample_volume, limits = _create_volume(
             volume_samples, **additional_sample_kwargs
         )
+
+        if self._volume:
+            sample_volume = self._volume(sample_volume)
+
         sample_volume = Image(sample_volume)
 
         for scatterer in volume_samples + field_samples:
@@ -289,8 +298,33 @@ class Optics(Feature):
 
         return new_volume, new_limits
 
-    def __call__(self, sample, **kwargs):
-        return Microscope(sample, self, **kwargs)
+    def __call__(self, sample, *args, **kwargs):
+        return Microscope(sample, self, *args, **kwargs)
+
+
+class SampleVolume(Optics):
+    """Voxelized view of the sample volume
+
+
+
+    Parameters
+    ----------
+    NA : float
+        The NA of the limiting aperature.
+    wavelength : float
+        The wavelength of the scattered light in meters.
+    magnification : float
+        The magnification of the optical system.
+    resolution : array_like[float (, float, float)]
+        The distance between pixels in the camera. A third value can be
+        included to define the resolution in the z-direction.
+    refractive_index_medium : float
+        The refractive index of the medium.
+    output_region : array_like[int, int, int, int]
+        The region of the image to output (x,y,width,height). Default
+        None returns entire image.
+
+    """
 
 
 class Fluorescence(Optics):
