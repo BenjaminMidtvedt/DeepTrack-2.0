@@ -218,11 +218,6 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#classes">
-   Classes
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-classes">
    Module classes
   </a>
@@ -440,24 +435,6 @@
 <span id="features"></span><h1>features<a class="headerlink" href="#module-deeptrack.features" title="Permalink to this headline">¶</a></h1>
 <p>Base class Feature and structural features</p>
 <p>Provides classes and tools for creating and interacting with features.</p>
-<div class="section" id="classes">
-<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
-<dl class="simple">
-<dt>Feature</dt><dd><p>Base abstract class.</p>
-</dd>
-<dt>StructuralFeature</dt><dd><p>Abstract extension of feature for interactions between features.</p>
-</dd>
-<dt>Branch</dt><dd><p>Implementation of <cite>StructuralFeature</cite> that resolves two features
-sequentially.</p>
-</dd>
-<dt>Probability</dt><dd><p>Implementation of <cite>StructuralFeature</cite> that randomly resolves a feature
-with a certain probability.</p>
-</dd>
-<dt>Duplicate</dt><dd><p>Implementation of <cite>StructuralFeature</cite> that sequentially resolves an
-integer number of deep-copies of a feature.</p>
-</dd>
-</dl>
-</div>
 <div class="section" id="module-classes">
 <h2>Module classes<a class="headerlink" href="#module-classes" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="add">
@@ -600,6 +577,18 @@ they may permanently change:</p>
 <dt id="deeptrack.features.ArithmeticOperationFeature">
 <em class="property">class </em><code class="sig-prename descclassname">deeptrack.features.</code><code class="sig-name descname">ArithmeticOperationFeature</code><span class="sig-paren">(</span><em class="sig-param">op</em>, <em class="sig-param">value=0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.features.ArithmeticOperationFeature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parent feature of arithmetic operation features like +*-/&gt; etc.</p>
+<p>Inputs can be either single values or a lists of values. If a list is passed, the operation is applied to each element in the list.
+If both inputs are lists of different lengths, the shorter list is cycled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>operation</strong><span class="classifier">callable</span></dt><dd><p>The operation to apply.</p>
+</dd>
+<dt><strong>value</strong><span class="classifier">number</span></dt><dd><p>The other value to apply the operation to.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Methods</p>
 <table class="longtable table autosummary">
 <colgroup>
@@ -1139,9 +1128,8 @@ the current value of each property is sent as input to the get method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>*args</strong><span class="classifier">dict, optional</span></dt><dd><p>Dicts passed as nonkeyword arguments will be deconstructed to key-value
-pairs and included in the field <cite>properties</cite> in the same way as keyword
-arguments.</p>
+<dt><strong>_input</strong><span class="classifier">List[Image] (optional)</span></dt><dd><p>Defines a list of DeepTrackNode objects that calculate the input of the feature.
+In most cases, this can be left empty.</p>
 </dd>
 <dt><strong>**kwargs</strong></dt><dd><p>All Keyword arguments will be wrapped as instances of <code class="docutils literal notranslate"><span class="pre">Property</span></code> and
 included in the field <cite>properties</cite>.</p>
@@ -1167,6 +1155,11 @@ called on the list as a whole (<cite>__distributed__ = False</cite>).</p>
 </dd>
 <dt><strong>__property_memorability__</strong></dt><dd><p>Controls whether to store the features properties to the <cite>Image</cite>.
 Values 1 or lower will be included by default.</p>
+</dd>
+<dt><strong>__conversion_table__</strong><span class="classifier">ConversionTable</span></dt><dd><p>A ConversionTable that is used to convert properties of the feature to
+the desired units.</p>
+</dd>
+<dt><strong>__gpu_compatible__</strong><span class="classifier">bool</span></dt><dd><p>Controls whether to use GPU acceleration for the feature.</p>
 </dd>
 </dl>
 </dd>
@@ -1838,7 +1831,20 @@ controlled by the <cite>key</cite> argument, where the feature resolved is chose
 <dl class="class">
 <dt id="deeptrack.features.Repeat">
 <em class="property">class </em><code class="sig-prename descclassname">deeptrack.features.</code><code class="sig-name descname">Repeat</code><span class="sig-paren">(</span><em class="sig-param">feature</em>, <em class="sig-param">N</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.features.Repeat" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">Methods</p>
+<dd><p>Repeats the evaluation of the input feature a certain number of times.</p>
+<p>Each time the feature is evaluated, it receives the output of the previous iteration. Each iteration
+also has its own set of properties. The index of the iteration is available as <cite>_ID</cite> or replicate_index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>feature</strong><span class="classifier">Feature</span></dt><dd><p>Feature to repeat</p>
+</dd>
+<dt><strong>count</strong><span class="classifier">int</span></dt><dd><p>Number of times to repeat</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
 <table class="longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />

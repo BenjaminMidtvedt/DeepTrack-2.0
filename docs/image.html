@@ -218,16 +218,6 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#classes">
-   CLASSES
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#functions">
-   Functions
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-classes">
    Module classes
   </a>
@@ -287,23 +277,6 @@
 <span id="image"></span><h1>image<a class="headerlink" href="#module-deeptrack.image" title="Permalink to this headline">¶</a></h1>
 <p>Image class and relative functions</p>
 <p>Defines the Image class and functions that operate on it.</p>
-<div class="section" id="classes">
-<h2>CLASSES<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
-<dl class="simple">
-<dt>Image</dt><dd><p>Subclass of numpy <cite>ndarray</cite>. Has the additional attribute properties
-which contains the properties used to generate it as a <cite>list</cite> of
-<cite>dicts</cite>.</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
-<dl class="simple">
-<dt>pad_image_to_fft(image: Image, axes = (0, 1))</dt><dd><p>Pads the image with zeros to optimize the speed of Fast Fourier
-Transforms.</p>
-</dd>
-</dl>
-</div>
 <div class="section" id="module-classes">
 <h2>Module classes<a class="headerlink" href="#module-classes" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id1">
@@ -311,7 +284,26 @@ Transforms.</p>
 <dl class="class">
 <dt id="deeptrack.image.Image">
 <em class="property">class </em><code class="sig-prename descclassname">deeptrack.image.</code><code class="sig-name descname">Image</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">copy=True</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.image.Image" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">Methods</p>
+<dd><p>Wrapper of array-like values.</p>
+<p>This class is used to wrap array-like values such as numpy arrays, lists, and tensors. It can also wrap
+numbers and booleans. It has the same interface as numpy arrays, but it is not a numpy array. It has a two-fold
+purpose:</p>
+<ol class="arabic simple">
+<li><p>To provide a unified interface for all array-like values, including tensors such as TensorFlow tensors or cupy arrays.
+This means that numpy functions can be used on Image objects regardless of whether they are numpy arrays or tensors.</p></li>
+<li><p>To store properties of <a href="#id2"><span class="problematic" id="id3">`</span></a>Feature`s used to create the image.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>value</strong><span class="classifier">array-like</span></dt><dd><p>The value to wrap. This can be a numpy array, list, or tensor.</p>
+</dd>
+<dt><strong>copy</strong><span class="classifier">bool</span></dt><dd><p>Whether to copy the value or not. If False, the value is not copied.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
 <table class="longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
@@ -327,22 +319,14 @@ Transforms.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deeptrack.image.Image.merge_properties_from" title="deeptrack.image.Image.merge_properties_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_properties_from</span></code></a>(other)</p></td>
 <td><p>Merge properties with those from another Image.</p></td>
 </tr>
-</tbody>
-</table>
-<table class="table">
-<colgroup>
-<col style="width: 55%" />
-<col style="width: 45%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><strong>to_cupy</strong></p></td>
-<td></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#deeptrack.image.Image.to_cupy" title="deeptrack.image.Image.to_cupy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_cupy</span></code></a>()</p></td>
+<td><p>Convert to cupy array.</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>to_numpy</strong></p></td>
-<td></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deeptrack.image.Image.to_numpy" title="deeptrack.image.Image.to_numpy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_numpy</span></code></a>()</p></td>
+<td><p>Convert to numpy array.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>to_tf</strong></p></td>
-<td></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#deeptrack.image.Image.to_tf" title="deeptrack.image.Image.to_tf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_tf</span></code></a>()</p></td>
+<td><p>Convert to tensorflow tensor.</p></td>
 </tr>
 </tbody>
 </table>
@@ -408,11 +392,29 @@ it is safe to manually call this function if there is any uncertainty.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>other</strong></dt><dd><p>The Image to retrieve properties from.</p>
+<dt><strong>other</strong><span class="classifier">Image or list of Image or numpy array</span></dt><dd><p>The data to retrieve properties from.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="deeptrack.image.Image.to_cupy">
+<code class="sig-name descname">to_cupy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.image.Image.to_cupy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to cupy array.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="deeptrack.image.Image.to_numpy">
+<code class="sig-name descname">to_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.image.Image.to_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to numpy array.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="deeptrack.image.Image.to_tf">
+<code class="sig-name descname">to_tf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.image.Image.to_tf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to tensorflow tensor.</p>
 </dd></dl>
 
 </dd></dl>
@@ -434,7 +436,8 @@ it is safe to manually call this function if there is any uncertainty.</p>
 <dl class="function">
 <dt id="deeptrack.image.maybe_cupy">
 <code class="sig-prename descclassname">deeptrack.image.</code><code class="sig-name descname">maybe_cupy</code><span class="sig-paren">(</span><em class="sig-param">array</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.image.maybe_cupy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Converts array to cupy if gpu is available and enabled.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="pad-image-to-fft">

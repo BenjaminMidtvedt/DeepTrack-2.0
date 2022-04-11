@@ -218,11 +218,6 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#classes">
-   Classes
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-classes">
    Module classes
   </a>
@@ -276,24 +271,6 @@
   <div class="section" id="module-deeptrack.properties">
 <span id="properties"></span><h1>properties<a class="headerlink" href="#module-deeptrack.properties" title="Permalink to this headline">¶</a></h1>
 <p>Tools to manage the properties of a feature</p>
-<div class="section" id="classes">
-<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
-<dl class="simple">
-<dt>Property</dt><dd><p>The class <cite>Property</cite>, which represents the values of a property of a feature.
-A Property be:
-* A constant (initialization with, e.g., a number, a tuple)
-* A sequence of variables (initialization with, e.g., an iterator)
-* A random variable (initialization with, e.g., a function)</p>
-</dd>
-<dt>SequentialProperty</dt><dd><p>The class <cite>SequentialProperty</cite>, which extends <cite>Property</cite> to sample one value
-for each step in a sequence.</p>
-</dd>
-<dt>PropertyDict</dt><dd><p>The class <cite>PropertyDict</cite>, which is a dictionary with each element a Property.
-The class provides utility functions to update, sample, clear and retrieve
-properties.</p>
-</dd>
-</dl>
-</div>
 <div class="section" id="module-classes">
 <h2>Module classes<a class="headerlink" href="#module-classes" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="property">
@@ -301,7 +278,23 @@ properties.</p>
 <dl class="class">
 <dt id="deeptrack.properties.Property">
 <em class="property">class </em><code class="sig-prename descclassname">deeptrack.properties.</code><code class="sig-name descname">Property</code><span class="sig-paren">(</span><em class="sig-param">sampling_rule</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.Property" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">Methods</p>
+<dd><p>Class that defines a property of a feature.</p>
+<p>A property contains one argument for evaluating feature. It can be a constant, a function, a list,
+a tuple, a numpy array, a slice, a dictionary, a DeepTrackNode (such as another property or feature),
+or a generator. If it is a function, it can have the names of other properties of the same feature as arguments.
+The output of the function is the value of the property. If it is a list, each element of the list will be sampled individually.
+If it is a dictionary, each value of the dictionary will be sampled individually. If it is a tuple or an array, it will be treated as a constant.
+If it is a slice, the start, stop and step will be sampled individually. If it is a generator, the next value will be sampled.
+When the generator is exhausted, it will yield the final value infinitely.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>sampling_rule</strong><span class="classifier">function, list, tuple, numpy array, slice, dictionary, DeepTrackNode, or generator</span></dt><dd><p>The rule to sample the property.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
 <table class="longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
@@ -405,19 +398,7 @@ in a sequence of images. This is often used when creating movies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>initializer</strong><span class="classifier">any</span></dt><dd><p>Sampling rule for the first step of the sequence.</p>
-</dd>
-<dt><strong>sampling_rule</strong><span class="classifier">any</span></dt><dd><p>Sampling rule for each step after the first.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Attributes</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>initializer</strong><span class="classifier">any</span></dt><dd><p>Sampling rule for the first step of the sequence.</p>
-</dd>
-<dt><strong>sampling_rule</strong><span class="classifier">any</span></dt><dd><p>Sampling rule for each step after the first.</p>
-</dd>
-<dt><strong>has_updated_since_last_resolve</strong><span class="classifier">bool</span></dt><dd><p>Whether the property has been updated since the last resolve.</p>
+<dt><strong>initialization</strong><span class="classifier">any</span></dt><dd><p>Sampling rule for the first step of the sequence.</p>
 </dd>
 </dl>
 </dd>
@@ -435,9 +416,6 @@ in a sequence of images. This is often used when creating movies.</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
 <td><p>Gets a set of citations for all objects in a pipeline.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deeptrack.properties.SequentialProperty.update" title="deeptrack.properties.SequentialProperty.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>([sequence_length])</p></td>
-<td><p>Updates current_value</p></td>
-</tr>
 </tbody>
 </table>
 <table class="table">
@@ -451,39 +429,6 @@ in a sequence of images. This is often used when creating movies.</p>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="deeptrack.properties.SequentialProperty.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">sequence_length=0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.SequentialProperty.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates current_value</p>
-<p>For each step in the sequence, sample <cite>self.sampling_rule</cite>.
-<cite>self.initializer</cite> is used for the first step. These rules
-should output one value per step. Sampling rules
-that are functions can optionally accept the following keyword
-arguments:</p>
-<ul class="simple">
-<li><p>sequence_step : the current position in the sequence.</p></li>
-<li><p>sequence_length : the length of the sequence.</p></li>
-<li><p>previous_value : the value of the property at the previous
-step in the sequence.</p></li>
-<li><p>previous_values : the value of the property at all previous
-steps in the sequence.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>sequence_length</strong><span class="classifier">int, optional</span></dt><dd><p>length of the sequence</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>self</dt><dd><p>returns self</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -495,7 +440,18 @@ steps in the sequence.</p></li>
 <dl class="function">
 <dt id="deeptrack.properties.propagate_data_to_dependencies">
 <code class="sig-prename descclassname">deeptrack.properties.</code><code class="sig-name descname">propagate_data_to_dependencies</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.propagate_data_to_dependencies" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Iterates the dependencies of a feature and sets the value of their properties to the values in kwargs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">features.Feature</span></dt><dd><p>The feature whose dependencies are to be updated</p>
+</dd>
+<dt><strong>kwargs</strong><span class="classifier">dict</span></dt><dd><p>The values to be set for the properties of the dependencies.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 </div>

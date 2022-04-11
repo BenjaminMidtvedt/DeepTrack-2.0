@@ -18,3 +18,5 @@ ParticleTracking
 data/
 datasets/
 examples/**/*/models/
+
+node_modules
