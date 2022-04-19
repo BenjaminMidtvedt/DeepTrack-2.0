@@ -31,7 +31,11 @@ release = "2.0"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc", "numpydoc"]
+extensions = ["sphinx.ext.autodoc", "numpydoc", "sphinx_automodapi.automodapi"]
+
+numpydoc_show_class_members = False
+numpydoc_show_inherited_class_members = False 
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -40,8 +44,6 @@ templates_path = ["_templates"]
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
-
-# Set output format to fjson
 
 
 # -- Options for HTML output -------------------------------------------------
