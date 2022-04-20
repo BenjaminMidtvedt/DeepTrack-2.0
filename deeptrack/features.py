@@ -573,6 +573,7 @@ class Feature(DeepTrackNode):
 
 class StructuralFeature(Feature):
     """Provides the structure of a feature-set
+
     Feature with __property_verbosity__ = 2 to avoid adding it to the list
     of properties, and __distributed__ = False to pass the input as-is.
     """
@@ -583,7 +584,9 @@ class StructuralFeature(Feature):
 
 class Chain(StructuralFeature):
     """Resolves two features sequentially.
+
     Passes the output of the first to the input of the second.
+
     Parameters
     ----------
     feature_1 : Feature
