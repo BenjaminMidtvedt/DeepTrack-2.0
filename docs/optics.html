@@ -112,6 +112,11 @@
   </a>
  </li>
  <li class="toctree-l2">
+  <a class="reference internal" href="elementwise.html">
+   elementwise
+  </a>
+ </li>
+ <li class="toctree-l2">
   <a class="reference internal" href="features.html">
    features
   </a>
@@ -119,6 +124,11 @@
  <li class="toctree-l2">
   <a class="reference internal" href="generators.html">
    generators
+  </a>
+ </li>
+ <li class="toctree-l2">
+  <a class="reference internal" href="holography.html">
+   holography
   </a>
  </li>
  <li class="toctree-l2">
@@ -169,6 +179,11 @@
  <li class="toctree-l2">
   <a class="reference internal" href="sequences.html">
    sequences
+  </a>
+ </li>
+ <li class="toctree-l2">
+  <a class="reference internal" href="statistics.html">
+   statistics
   </a>
  </li>
  <li class="toctree-l2">
@@ -280,7 +295,7 @@ create camera images of samples.</p>
 <h3>Brightfield<a class="headerlink" href="#brightfield" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.optics.Brightfield">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.optics.</code><code class="sig-name descname">Brightfield</code><span class="sig-paren">(</span><em class="sig-param">NA=0.7</em>, <em class="sig-param">wavelength=6.6e-07</em>, <em class="sig-param">magnification=10</em>, <em class="sig-param">resolution=(1e-06</em>, <em class="sig-param">1e-06</em>, <em class="sig-param">1e-06)</em>, <em class="sig-param">refractive_index_medium=1.33</em>, <em class="sig-param">upscale=1</em>, <em class="sig-param">padding=(10</em>, <em class="sig-param">10</em>, <em class="sig-param">10</em>, <em class="sig-param">10)</em>, <em class="sig-param">output_region=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">128</em>, <em class="sig-param">128)</em>, <em class="sig-param">pupil=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.optics.Brightfield" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.optics.</code><code class="sig-name descname">Brightfield</code><span class="sig-paren">(</span><em class="sig-param">NA=0.7</em>, <em class="sig-param">wavelength=6.6e-07</em>, <em class="sig-param">magnification=10</em>, <em class="sig-param">resolution=1e-06</em>, <em class="sig-param">refractive_index_medium=1.33</em>, <em class="sig-param">padding=(10</em>, <em class="sig-param">10</em>, <em class="sig-param">10</em>, <em class="sig-param">10)</em>, <em class="sig-param">output_region=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">128</em>, <em class="sig-param">128)</em>, <em class="sig-param">pupil=None</em>, <em class="sig-param">illumination=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.optics.Brightfield" title="Permalink to this definition">¶</a></dt>
 <dd><p>Images coherently illuminated samples.</p>
 <p>Images samples by creating a discretized volume, where each pixel
 represents the effective refractive index of that pixel. Light is
@@ -304,8 +319,6 @@ included to define the resolution in the z-direction.</p>
 </dd>
 <dt><strong>refractive_index_medium</strong><span class="classifier">float</span></dt><dd><p>The refractive index of the medium.</p>
 </dd>
-<dt><strong>upscale</strong><span class="classifier">int</span></dt><dd><p>Upscales the pupil function for a more accurate result.</p>
-</dd>
 <dt><strong>padding</strong><span class="classifier">array_like[int, int, int, int]</span></dt><dd><p>Pads the sample volume with zeros to avoid edge effects.</p>
 </dd>
 <dt><strong>output_region</strong><span class="classifier">array_like[int, int, int, int]</span></dt><dd><p>The region of the image to output (x,y,width,height). Default
@@ -325,19 +338,19 @@ receive an unaberrated pupil as input.</p>
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>(sample, **kwargs)</p></td>
-<td><p>Call self as a function.</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -348,7 +361,7 @@ receive an unaberrated pupil as input.</p>
 <h3>Fluorescence<a class="headerlink" href="#fluorescence" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.optics.Fluorescence">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.optics.</code><code class="sig-name descname">Fluorescence</code><span class="sig-paren">(</span><em class="sig-param">NA=0.7</em>, <em class="sig-param">wavelength=6.6e-07</em>, <em class="sig-param">magnification=10</em>, <em class="sig-param">resolution=(1e-06</em>, <em class="sig-param">1e-06</em>, <em class="sig-param">1e-06)</em>, <em class="sig-param">refractive_index_medium=1.33</em>, <em class="sig-param">upscale=1</em>, <em class="sig-param">padding=(10</em>, <em class="sig-param">10</em>, <em class="sig-param">10</em>, <em class="sig-param">10)</em>, <em class="sig-param">output_region=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">128</em>, <em class="sig-param">128)</em>, <em class="sig-param">pupil=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.optics.Fluorescence" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.optics.</code><code class="sig-name descname">Fluorescence</code><span class="sig-paren">(</span><em class="sig-param">NA=0.7</em>, <em class="sig-param">wavelength=6.6e-07</em>, <em class="sig-param">magnification=10</em>, <em class="sig-param">resolution=1e-06</em>, <em class="sig-param">refractive_index_medium=1.33</em>, <em class="sig-param">padding=(10</em>, <em class="sig-param">10</em>, <em class="sig-param">10</em>, <em class="sig-param">10)</em>, <em class="sig-param">output_region=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">128</em>, <em class="sig-param">128)</em>, <em class="sig-param">pupil=None</em>, <em class="sig-param">illumination=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.optics.Fluorescence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optical device for fluorescenct imaging</p>
 <p>Images samples by creating a discretized volume, where each pixel
 represents the intensity of the light emitted by fluorophores in
@@ -367,8 +380,6 @@ included to define the resolution in the z-direction.</p>
 </dd>
 <dt><strong>refractive_index_medium</strong><span class="classifier">float</span></dt><dd><p>The refractive index of the medium.</p>
 </dd>
-<dt><strong>upscale</strong><span class="classifier">int</span></dt><dd><p>Upscales the pupil function for a more accurate result.</p>
-</dd>
 <dt><strong>padding</strong><span class="classifier">array_like[int, int, int, int]</span></dt><dd><p>Pads the sample volume with zeros to avoid edge effects.</p>
 </dd>
 <dt><strong>output_region</strong><span class="classifier">array_like[int, int, int, int]</span></dt><dd><p>The region of the image to output (x,y,width,height). Default
@@ -388,19 +399,19 @@ receive an unaberrated pupil as input.</p>
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>(sample, **kwargs)</p></td>
-<td><p>Call self as a function.</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -434,17 +445,20 @@ receive an unaberrated pupil as input.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -475,17 +489,20 @@ receive an unaberrated pupil as input.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -496,7 +513,7 @@ receive an unaberrated pupil as input.</p>
 <h3>Optics<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.optics.Optics">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.optics.</code><code class="sig-name descname">Optics</code><span class="sig-paren">(</span><em class="sig-param">NA=0.7</em>, <em class="sig-param">wavelength=6.6e-07</em>, <em class="sig-param">magnification=10</em>, <em class="sig-param">resolution=(1e-06</em>, <em class="sig-param">1e-06</em>, <em class="sig-param">1e-06)</em>, <em class="sig-param">refractive_index_medium=1.33</em>, <em class="sig-param">upscale=1</em>, <em class="sig-param">padding=(10</em>, <em class="sig-param">10</em>, <em class="sig-param">10</em>, <em class="sig-param">10)</em>, <em class="sig-param">output_region=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">128</em>, <em class="sig-param">128)</em>, <em class="sig-param">pupil=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.optics.Optics" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.optics.</code><code class="sig-name descname">Optics</code><span class="sig-paren">(</span><em class="sig-param">NA=0.7</em>, <em class="sig-param">wavelength=6.6e-07</em>, <em class="sig-param">magnification=10</em>, <em class="sig-param">resolution=1e-06</em>, <em class="sig-param">refractive_index_medium=1.33</em>, <em class="sig-param">padding=(10</em>, <em class="sig-param">10</em>, <em class="sig-param">10</em>, <em class="sig-param">10)</em>, <em class="sig-param">output_region=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">128</em>, <em class="sig-param">128)</em>, <em class="sig-param">pupil=None</em>, <em class="sig-param">illumination=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.optics.Optics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract base optics class.</p>
 <p>Provides structure and methods common for most optical devices.</p>
 <dl class="field-list simple">
@@ -512,8 +529,6 @@ receive an unaberrated pupil as input.</p>
 included to define the resolution in the z-direction.</p>
 </dd>
 <dt><strong>refractive_index_medium</strong><span class="classifier">float</span></dt><dd><p>The refractive index of the medium.</p>
-</dd>
-<dt><strong>upscale</strong><span class="classifier">int</span></dt><dd><p>Upscales the pupil function for a more accurate result.</p>
 </dd>
 <dt><strong>padding</strong><span class="classifier">array_like[int, int, int, int]</span></dt><dd><p>Pads the sample volume with zeros to avoid edge effects.</p>
 </dd>
@@ -534,19 +549,19 @@ receive an unaberrated pupil as input.</p>
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>(sample, **kwargs)</p></td>
-<td><p>Call self as a function.</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>

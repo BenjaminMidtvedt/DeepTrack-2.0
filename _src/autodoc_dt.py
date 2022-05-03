@@ -1,6 +1,10 @@
 import sys
 import os
 import inspect
+import docutils
+import docutils.statemachine
+import docutils.parsers.rst
+import docutils.nodes
 
 sys.path.append(os.path.abspath("../"))
 
@@ -11,112 +15,200 @@ import deeptrack
 import deeptrack.backend
 
 
-head_file = open(os.path.join(PATH_TO_SRC, deeptrack.__name__ + ".rst"), "w")
-head_file.write("Documentation\n=============\n\n.. toctree::\n   :maxdepth: 1\n   \n")
-head_file.flush()
+def parse_class_docstring(class_obj):
+    """Parse the docstring of a class using docutils.parsers.rst.
 
-added = []
-# Get all submodules. Non-recursive, but could be made so
+    Parameters
+    ----------
+    class_obj : class
+        The class to parse the docstring from.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the sections of the parsed docstring.
+    """
+    docstring = inspect.getdoc(class_obj)
+    if docstring is None:
+        return {}
+
+    # Parse the docstring using docutils.parsers.rst
+    parser = docutils.parsers.rst.Parser()
+    settings = docutils.frontend.OptionParser(
+        components=(docutils.parsers.rst.Parser,)
+    ).get_default_values()
+    document = docutils.utils.new_document("<docstring>", settings=settings)
+    parser.parse(docstring, document)
+
+    # Extract the sections. Text before the first section is put in the body section.
+    sections = {"body": []}
+    section_names = ["body"]
+
+    for node in document.children:
+
+        # Ignore system messages
+        if isinstance(node, docutils.nodes.system_message):
+            continue
+
+        if isinstance(node, docutils.nodes.section):
+            # Get the name of the section and add it to the list of sections
+            section_name = node.children[0].astext()
+            section_names.append(section_name)
+            sections[section_name] = []
+
+        # Add the node to the current section
+        sections[section_names[-1]].append(parse_node(node))
+
+    return {
+        "sections": sections,
+    }
 
 
-def get_submodules(module):
-    return inspect.getmembers(
-        module,
-        lambda x: inspect.ismodule(x)
-        and getattr(module, x.__name__.split(".")[-1], False)
-        and x.__name__.startswith(module.__name__)
-        and x.__name__ != module.__name__
-        and x.__name__ not in added,
-    )
+def parse_node(node) -> str:
+    """Parse a docutils node to a dictionary containing the type of node and its contents.
+
+    Parameters
+    ----------
+    node : docutils.nodes.Node
+        The node to parse.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the parsed node.
+    """
+    # Get the node type
+    node_type = type(node).__name__
+
+    # Get the node children
+    children = []
+    for child in node.children:
+        children.append(parse_node(child))
+
+    # Get the node content
+    content = node.astext()
+    if node_type == "Text":
+        return {
+            "type": node_type,
+            "content": content,
+        }
+    else:
+        return {
+            "type": node_type,
+            "children": children,
+        }
 
 
-for _, submodule in get_submodules(deeptrack):
-    if submodule.__name__ in added:
-        continue
+output_data = {}
 
-    print("Adding package ", submodule.__name__)
-    added.append(submodule.__name__)
-    # Add to head
+# Find all submodules of deeptrack
+submodules = [
+    obj for name, obj in inspect.getmembers(deeptrack) if inspect.ismodule(obj)
+]
 
-    submodule_name = submodule.__name__.split(".")[-1]
-    submodule_path = deeptrack.__name__ + "." + submodule_name
+# Exclude modules that are not submodules of deeptrack
+submodules = [obj for obj in submodules if obj.__name__.startswith("deeptrack.")]
 
-    head_file.write("   " + submodule_name + "\n")
-    head_file.flush()
+# Recursively find all submodules of submodules
+max_depth = 3
+for _ in range(max_depth):
+    for submodule in submodules:
+        nested_submodules = [
+            obj for name, obj in inspect.getmembers(submodule) if inspect.ismodule(obj)
+        ]
+        # exclude modules that are not submodules of deeptrack
+        nested_submodules = [
+            obj
+            for obj in nested_submodules
+            if obj.__name__.startswith("deeptrack.") and obj not in submodules
+        ]
+        submodules.extend(nested_submodules)
 
-    submodule_file = open(os.path.join(PATH_TO_SRC, submodule_name + ".rst"), "w")
+output_data["submodules"] = [submodule.__name__ for submodule in submodules]
 
-    submodule_file.write(
-        submodule_name
-        + "\n"
-        + "=" * len(submodule_name)
-        + "\n\n"
-        + ".. automodule:: "
-        + submodule_path
-        + "\n\n"
-    )
-    submodule_file.flush()
+for submodule in submodules:
 
-    subsubmodules = get_submodules(submodule) or [("", None)]
+    # Find all classes in submodule
+    classes = [
+        obj for name, obj in inspect.getmembers(submodule) if inspect.isclass(obj)
+    ]
 
-    for ss_name, subsubmodule in subsubmodules:
-        if not subsubmodule:
-            subsubmodule = submodule
-        else:
-            ss_name = ss_name.split(".")[-1]
-            submodule_file.write(ss_name + "\n" + "-" * len(ss_name) + "\n\n")
+    # Exclude classes that are not classes in submodule
+    classes = [obj for obj in classes if obj.__module__ == submodule.__name__]
 
-        submodule_classes = inspect.getmembers(
-            subsubmodule,
-            lambda x: inspect.isclass(x) and x.__module__ == subsubmodule.__name__,
+    # Find all functions in submodule
+    functions = [
+        obj for name, obj in inspect.getmembers(submodule) if inspect.isfunction(obj)
+    ]
+
+    # Exclude functions that are not functions in submodule
+    functions = [obj for obj in functions if obj.__module__ == submodule.__name__]
+
+    output_data[submodule.__name__] = {
+        "classes": {},
+        "functions": {},
+        "docstring": parse_class_docstring(submodule),
+    }
+
+    # Add the documenation for the classes
+    for obj in classes:
+
+        doc = parse_class_docstring(obj)
+
+        # Add the qualified name of the superclass
+        if obj.__bases__:
+            superclass = obj.__bases__[0].__name__
+            doc["superclass"] = superclass
+
+        # Add the qualified name of the module of the superclass
+        if obj.__bases__:
+            superclass_module = obj.__bases__[0].__module__
+            doc["superclass_module"] = superclass_module
+
+        # Add the qualified name of the module of the class
+        doc["module"] = obj.__module__
+
+        # Add the name of the class
+        doc["name"] = obj.__name__
+
+        # Add the qualified name of the class
+        doc["qualified_name"] = obj.__module__ + "." + obj.__name__
+
+        # Find the signature of the constructor
+
+        signature = inspect.signature(obj.__init__)
+        # remove type annotations
+        signature = signature.replace(return_annotation=inspect.Parameter.empty)
+
+        # Remove the self argument
+        signature = signature.replace(
+            parameters=[p for p in list(signature.parameters.values())[1:]]
         )
 
-        if submodule_classes:
+        doc["signature"] = str(signature)
 
-            submodule_file.write("Module classes\n<<<<<<<<<<<<<<\n\n")
-            submodule_file.flush()
+        # Add the documenation for the class
+        output_data[submodule.__name__]["classes"][obj.__name__] = doc
 
-            for name, member in submodule_classes:
-                member_name = submodule_path + "." + name
-                submodule_file.write(
-                    name
-                    + "\n"
-                    + "^" * len(name)
-                    + "\n\n"
-                    + ".. autoclass:: "
-                    + member_name
-                    + "\n   :members:"
-                    + "\n   :exclude-members: get\n\n"
-                )
-                submodule_file.flush()
+    # Add the documenation for the functions
+    for obj in functions:
 
-        # ADD FUNCTIONS
+        doc = parse_class_docstring(obj)
 
-        submodule_funcs = inspect.getmembers(
-            subsubmodule,
-            lambda x: inspect.isfunction(x)
-            and x.__module__ == subsubmodule.__name__
-            and x.__name__[0] != "_",
-        )
+        # Add the qualified name of the module of the function
+        doc["module"] = obj.__module__
 
-        if submodule_funcs:
+        # Add the name of the function
+        doc["name"] = obj.__name__
 
-            submodule_file.write("Module functions\n<<<<<<<<<<<<<<<<\n\n")
-            submodule_file.flush()
+        # Add the qualified name of the function
+        doc["qualified_name"] = obj.__module__ + "." + obj.__name__
 
-            for name, member in submodule_funcs:
-                member_name = submodule_path + "." + name
-                submodule_file.write(
-                    name
-                    + "\n"
-                    + "^" * len(name)
-                    + "\n\n"
-                    + ".. autofunction:: "
-                    + member_name
-                    + "\n\n"
-                )
-                submodule_file.flush()
+        # Add the documenation for the function
+        output_data[submodule.__name__]["functions"][obj.__name__] = doc
 
-    submodule_file.close()
+# Save the output data as JSON
+import json
 
-head_file.close()
+with open(os.path.abspath("./data.json"), "w") as f:
+    json.dump(output_data, f)

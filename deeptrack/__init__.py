@@ -1,13 +1,9 @@
 # flake8: noqa
 from pint import UnitRegistry, Context
+from .backend.pint_definition import pint_definitions
 
-units = UnitRegistry()
-_pixel_context = """
-@context(pixel_size = 1) deeptrack = dt
-    [printing_unit] -> [length]: value * pixel_size * (meter / pixel)
-    [length] -> [printing_unit]: value / pixel_size / (meter / pixel)
-@end
-"""
+units = UnitRegistry(pint_definitions.split("\n"))
+units.enable_contexts("dt")
 
 import tensorflow as tf
 
@@ -18,8 +14,6 @@ except Exception:
     # Invalid device or cannot modify virtual devices once initialized.
     pass
 
-units.load_definitions(_pixel_context.split("\n"))
-units.enable_contexts("dt")
 
 from .features import *
 from .aberrations import *
@@ -32,7 +26,18 @@ from .scatterers import *
 from .sequences import *
 from .elementwise import *
 from .statistics import *
+from .holography import *
 
-from .image import array, strip
+from .image import strip
 
-from . import image, losses, generators, models, utils, layers, backend, test
+from . import (
+    image,
+    losses,
+    generators,
+    models,
+    utils,
+    layers,
+    backend,
+    test,
+    visualization,
+)

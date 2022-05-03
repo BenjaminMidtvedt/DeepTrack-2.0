@@ -7,8 +7,10 @@ Documentation
    backend
    aberrations
    augmentations
+   elementwise
    features
    generators
+   holography
    image
    layers
    losses
@@ -19,6 +21,7 @@ Documentation
    properties
    scatterers
    sequences
+   statistics
    test
    types
    utils

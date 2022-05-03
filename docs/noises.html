@@ -112,6 +112,11 @@
   </a>
  </li>
  <li class="toctree-l2">
+  <a class="reference internal" href="elementwise.html">
+   elementwise
+  </a>
+ </li>
+ <li class="toctree-l2">
   <a class="reference internal" href="features.html">
    features
   </a>
@@ -119,6 +124,11 @@
  <li class="toctree-l2">
   <a class="reference internal" href="generators.html">
    generators
+  </a>
+ </li>
+ <li class="toctree-l2">
+  <a class="reference internal" href="holography.html">
+   holography
   </a>
  </li>
  <li class="toctree-l2">
@@ -172,6 +182,11 @@
   </a>
  </li>
  <li class="toctree-l2">
+  <a class="reference internal" href="statistics.html">
+   statistics
+  </a>
+ </li>
+ <li class="toctree-l2">
   <a class="reference internal" href="test.html">
    test
   </a>
@@ -215,6 +230,11 @@
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#background">
      Background
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexgaussian">
+     ComplexGaussian
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -293,17 +313,52 @@ offset : float</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="complexgaussian">
+<h3>ComplexGaussian<a class="headerlink" href="#complexgaussian" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="deeptrack.noises.ComplexGaussian">
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.noises.</code><code class="sig-name descname">ComplexGaussian</code><span class="sig-paren">(</span><em class="sig-param">mu=0</em>, <em class="sig-param">sigma=1</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.noises.ComplexGaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p class="rubric">Methods</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<td><p>Visualizes the output of the feature.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -333,17 +388,20 @@ offset : float</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -354,7 +412,7 @@ offset : float</p>
 <h3>Noise<a class="headerlink" href="#noise" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.noises.Noise">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.noises.</code><code class="sig-name descname">Noise</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.noises.Noise" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.noises.</code><code class="sig-name descname">Noise</code><span class="sig-paren">(</span><em class="sig-param">_input=[]</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.noises.Noise" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base abstract noise class.</p>
 <p class="rubric">Methods</p>
 <table class="longtable table autosummary">
@@ -363,17 +421,20 @@ offset : float</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -393,7 +454,7 @@ offset : float</p>
 <h3>Poisson<a class="headerlink" href="#poisson" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.noises.Poisson">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.noises.</code><code class="sig-name descname">Poisson</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">snr=100</em>, <em class="sig-param">background=0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.noises.Poisson" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.noises.</code><code class="sig-name descname">Poisson</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">snr=100</em>, <em class="sig-param">background=0</em>, <em class="sig-param">max_val=100000000.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.noises.Poisson" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds Poisson-distributed noise to an image</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -414,17 +475,20 @@ signal of the image.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>

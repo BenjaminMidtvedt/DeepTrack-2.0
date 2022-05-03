@@ -11,8 +11,10 @@ required = [
     "numpy",
     "scipy",
     "pint",
+    "scikit-image",
     "pydeepimagej",
 ]
+
 installed = [pkg.key for pkg in pkg_resources.working_set]
 if (
     not "tensorflow" in installed
@@ -23,7 +25,7 @@ if (
 
 setuptools.setup(
     name="deeptrack",  # Replace with your own username
-    version="1.0.0.a0",
+    version="1.1.0",
     author="Benjamin Midtvedt",
     author_email="benjamin.midtvedt@physics.gu.se",
     description="A deep learning oriented microscopy image simulation package",

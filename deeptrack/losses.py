@@ -107,7 +107,7 @@ def sigmoid(func):
     # Takes the Sigmoid function of the prediction
     def wrapper(T, P):
         P = K.clip(P, -50, 50)
-        P = 1 / (1 + K.exp(-P))
+        P = 1 / (1 + K.exp(-1 * P))
         return func(T, P)
 
     wrapper.__name__ = "sigmoid_" + func.__name__
@@ -193,18 +193,18 @@ def rotational_consistency(T, P):
     return K.mean(cos_err + sin_err + norm_err) / 3
 
 
+def size_consistency(T, P):
+    T = K.reshape(T[:, :6], (-1, 2, 3))
+    transformation_matrix = T[:, :2, :2]
+    determinant = tf.linalg.det(transformation_matrix)
+
+    relative_predicted_size = P / P[:1]
+
+    err = K.square(determinant - relative_predicted_size)
+    return K.mean(err)
+
+
 def adjacency_consistency(_, P):
-
-    # dX0 = P[:, 1:, :, 1] - P[:, :-1, :, 1]
-    # dX1 = P[:, 1:, :, 0] - P[:, :-1, :, 0]
-
-    # dY0 = P[:, :, 1:, 0] - P[:, :, :-1, 0]
-    # dY1 = P[:, :, 1:, 1] - P[:, :, :-1, 1]
-
-    # dX0_error = K.square(dX0 + 1)
-    # dX1_error = K.square(dX1)
-    # dY0_error = K.square(dY0 + 1)
-    # dY1_error = K.square(dY1)
 
     dFdx = P[:, 1:, :, :2] - P[:, :-1, :, :2]
     dFdy = P[:, :, 1:, :2] - P[:, :, :-1, :2]

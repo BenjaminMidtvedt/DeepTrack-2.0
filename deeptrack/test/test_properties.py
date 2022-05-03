@@ -48,6 +48,11 @@ class TestProperties(unittest.TestCase):
             )
             property_dict._update()
 
+    def test_AcceptsReplicateIndex(self):
+
+        prop = properties.Property(lambda _ID: _ID)
+        self.assertEqual(prop(), ())
+
 
 if __name__ == "__main__":
     unittest.main()

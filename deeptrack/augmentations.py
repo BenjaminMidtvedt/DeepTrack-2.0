@@ -1,66 +1,28 @@
-""" Features that augment images
-
-Augmentations are features that can resolve more than one image without
-calling `.resolve()` on the parent feature. Specifically, they create
-`updates_per_reload` images, while calling their parent feature
-`load_size` times.
-
-Classes
--------
-Augmentation
-    Base abstract augmentation class.
-PreLoad
-    Simple storage with no augmentation.
-FlipLR
-    Flips images left-right.
-FlipUD
-    Flips images up-down.
-FlipDiagonal
-    Flips images diagonally.
+""" Features that augment images.
 """
 
-from .features import Feature
-from .image import Image
-from . import utils
-from .types import ArrayLike, PropertyLike
+import warnings
+import random
+from typing import Callable
 
 import numpy as np
 import scipy.ndimage as ndimage
-from scipy.ndimage.interpolation import map_coordinates
 from scipy.ndimage.filters import gaussian_filter
+from scipy.ndimage.interpolation import map_coordinates
+
+from . import utils
+from .features import Feature
+from .image import Image
+from .types import ArrayLike, PropertyLike
 
 
 class Augmentation(Feature):
     """Base abstract augmentation class.
 
-    Augmentations are features that can resolve more than one image without
-    calling `.resolve()` on the parent feature. Specifically, they create
-    `updates_per_reload` images, while calling their parent feature
-    `load_size` times. They achieve this by resolving `load_size` results
-    from the parent feature at once, and randomly drawing one of these
-    results as input to the method `.get()`. A new input is chosen
-    every time `.update()` is called. Once `.update()` has been called
-    `updated_per_reload` times, a new batch of `load_size` results are
-    resolved from the parent feature.
-
-    The method `.get()` of implementations of this class may accept the
-    property `number_of_updates` as an argument. This number represents
-    the number of times the `.update()` method has been called since the
-    last time the parent feature was resolved.
-
     Parameters
     ----------
-    feature : Feature, optional, deprecated
-        DEPRECATED. The parent feature. If not passed, it acts like any other feature.
-    load_size : int
-        Number of results to resolve from the parent feature.
-    updates_per_reload : int
-        Number of times `.update()` is called before resolving new results
-        from the parent feature.
-    update_properties : Callable or None
-        Function called on the output of the method `.get()`. Overrides
-        the default behaviour, allowing full control over how to update
-        the properties of the output to account for the augmentation.
+    time_consistend: boolean
+       Whether to augment all images in a sequence equally.
     """
 
     def __init__(self, time_consistent=False, **kwargs):
@@ -104,6 +66,65 @@ class Augmentation(Feature):
         pass
 
 
+class Reuse(Feature):
+    """Acts like cache.
+
+    `Reuse` stores the output of a feature and reuses it for subsequent calls, even if it is updated.
+    This is can be used after a time-consuming feature to augment the output of the feature without
+    recalculating it. For example::
+
+       pipeline = dt.Reuse(pipeline, uses=2) >> dt.FlipLR()
+
+    Here, the output of pipeline is used twice, augmented randomly by FlipLR.
+
+    Parameters
+    ----------
+    feature : Feature
+       The feature to reuse.
+    uses : int
+       Number of each stored image uses before evaluating `feature`. Note that the actual total number of uses is `uses * storage`. Should be constant.
+    storage : int
+       Number of instances of the output of `feature` to cache. Should be constant.
+
+    """
+
+    __distributed__ = False
+
+    def __init__(self, feature, uses=2, storage=1, **kwargs):
+
+        super().__init__(uses=uses, storage=storage, **kwargs)
+
+        self.feature = self.add_feature(feature)
+        self.counter = 0
+        self.cache = []
+
+    def get(self, image, uses, storage, **kwargs):
+
+        self.cache = self.cache[-storage:]
+
+        output = None
+
+        if len(self.cache) < storage or self.counter % (uses * storage) == 0:
+            output = self.feature(image)
+            self.cache.append(output)
+        else:
+            output = random.choice(self.cache)
+
+        self.counter += 1
+
+        if not isinstance(output, list):
+            output = [output]
+
+        outputs = []
+        for image in output:
+            image_copy = Image(image)
+            # shallow copy properties before output
+            image_copy.properties = [prop.copy() for prop in image.properties]
+            outputs.append(image_copy)
+
+        return outputs
+
+
 class FlipLR(Augmentation):
     """Flips images left-right.
 
@@ -129,20 +150,16 @@ class FlipLR(Augmentation):
 
     def get(self, image, augment, **kwargs):
         if augment:
-            image = np.fliplr(image)
+            image = image[:, ::-1]
         return image
 
     def update_properties(self, image, augment, **kwargs):
         if augment:
             for prop in image.properties:
                 if "position" in prop:
-                    position = prop["position"]
-                    new_position = (
-                        position[0],
-                        image.shape[1] - position[1] - 1,
-                        *position[2:],
-                    )
-                    prop["position"] = new_position
+                    position = np.array(prop["position"])
+                    position[..., 1] = image.shape[1] - position[..., 1] - 1
+                    prop["position"] = position
 
 
 class FlipUD(Augmentation):
@@ -170,19 +187,16 @@ class FlipUD(Augmentation):
 
     def get(self, image, augment, **kwargs):
         if augment:
-            image = np.flipud(image)
+            image = image[::-1]
         return image
 
     def update_properties(self, image, augment, **kwargs):
         if augment:
             for prop in image.properties:
                 if "position" in prop:
-                    position = prop["position"]
-                    new_position = (
-                        image.shape[0] - position[0] - 1,
-                        *position[1:],
-                    )
-                    prop["position"] = new_position
+                    position = np.array(prop["position"])
+                    position[..., 0] = image.shape[0] - position[..., 0] - 1
+                    prop["position"] = position
 
 
 class FlipDiagonal(Augmentation):
@@ -217,9 +231,11 @@ class FlipDiagonal(Augmentation):
         if augment:
             for prop in image.properties:
                 if "position" in prop:
-                    position = prop["position"]
-                    new_position = (position[1], position[0], *position[2:])
-                    prop["position"] = new_position
+                    position = np.array(prop["position"])
+                    t = np.array(position[..., 0])
+                    position[..., 0] = position[..., 1]
+                    position[..., 1] = t
+                    prop["position"] = position
 
 
 class Affine(Augmentation):
@@ -380,18 +396,21 @@ class Affine(Augmentation):
         for prop in image.properties:
             if "position" in prop:
                 position = np.array(prop["position"])
-                prop["position"] = np.array(
-                    (
-                        *(
-                            (
-                                inverse_mapping
-                                @ (position[:2] - center + np.array([dy, dx]))
-                                + center
-                            )
-                        ),
-                        *position[3:],
+
+                inverted = (
+                    np.dot(
+                        inverse_mapping,
+                        (position[..., :2] - center + np.array([dy, dx]))[
+                            ..., np.newaxis
+                        ],
                     )
-                )
+                    .squeeze()
+                    .transpose()
+                ) + center
+
+                position[..., :2] = inverted
+
+                prop["position"] = position
 
         return image
 
@@ -609,7 +628,7 @@ class Crop(Augmentation):
             if "position" in prop:
                 position = np.array(prop["position"])
                 try:
-                    position[0:2] -= np.array(slice_start)[0:2]
+                    position[..., 0:2] -= np.array(slice_start)[0:2]
                     prop["position"] = position
                 except IndexError:
                     pass

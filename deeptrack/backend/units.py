@@ -4,7 +4,23 @@ from .. import units as u
 
 
 class ConversionTable:
-    __default_context = Context()
+    """Convert a dictionary of values to the desired units.
+
+    The conversions are specified in the constructor. Each key in the dictionary corresponds
+    to the name of a property. The value of the key is a tuple of two units. The first unit is
+    the default unit, and the second is the desired unit.
+
+    To convert a dictionary of values to the desired units, the `convert` method is called with the
+    dictionary as an argument. The dictionary is converted to a dictionary of quantities, and the
+    quantities are converted to the desired units. If any value is not a quantity, it is assumed to
+    be in the default unit. If a value with the same key is not in `self.conversions`, it is left unchanged.
+
+    Parameters
+    ----------
+    conversions : dict
+        The dictionary of conversions. Each key is the name of a property, and the value is a tuple of two
+        units. The first unit is the default unit, and the second is the desired unit.
+    """
 
     def __init__(self, **conversions):
 
@@ -22,8 +38,6 @@ class ConversionTable:
 
     def convert(self, **kwargs):
 
-        pixel_size = kwargs.get("pixel_size", 1)
-
         for key, val in self.conversions.items():
 
             if key not in kwargs:
@@ -39,11 +53,8 @@ class ConversionTable:
             # If not quantity, assume default
             if not isinstance(quantity, Quantity):
                 quantity = quantity * default_unit
-
-            quantity = quantity.to(desired_unit, "dt", pixel_size=pixel_size)
-
+            quantity = quantity.to(desired_unit)
             quantity = quantity.to_reduced_units()
-
             kwargs[key] = quantity
 
         return kwargs

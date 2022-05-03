@@ -33,7 +33,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="features" href="features.html" />
+    <link rel="next" title="elementwise" href="elementwise.html" />
     <link rel="prev" title="aberrations" href="aberrations.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -112,6 +112,11 @@
   </a>
  </li>
  <li class="toctree-l2">
+  <a class="reference internal" href="elementwise.html">
+   elementwise
+  </a>
+ </li>
+ <li class="toctree-l2">
   <a class="reference internal" href="features.html">
    features
   </a>
@@ -119,6 +124,11 @@
  <li class="toctree-l2">
   <a class="reference internal" href="generators.html">
    generators
+  </a>
+ </li>
+ <li class="toctree-l2">
+  <a class="reference internal" href="holography.html">
+   holography
   </a>
  </li>
  <li class="toctree-l2">
@@ -172,6 +182,11 @@
   </a>
  </li>
  <li class="toctree-l2">
+  <a class="reference internal" href="statistics.html">
+   statistics
+  </a>
+ </li>
+ <li class="toctree-l2">
   <a class="reference internal" href="test.html">
    test
   </a>
@@ -202,11 +217,6 @@
 
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#classes">
-   Classes
-  </a>
- </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-classes">
    Module classes
@@ -263,8 +273,8 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#preload">
-     PreLoad
+    <a class="reference internal nav-link" href="#reuse">
+     Reuse
     </a>
    </li>
   </ul>
@@ -288,26 +298,7 @@
                 
   <div class="section" id="module-deeptrack.augmentations">
 <span id="augmentations"></span><h1>augmentations<a class="headerlink" href="#module-deeptrack.augmentations" title="Permalink to this headline">¶</a></h1>
-<p>Features that augment images</p>
-<p>Augmentations are features that can resolve more than one image without
-calling <cite>.resolve()</cite> on the parent feature. Specifically, they create
-<cite>updates_per_reload</cite> images, while calling their parent feature
-<cite>load_size</cite> times.</p>
-<div class="section" id="classes">
-<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
-<dl class="simple">
-<dt>Augmentation</dt><dd><p>Base abstract augmentation class.</p>
-</dd>
-<dt>PreLoad</dt><dd><p>Simple storage with no augmentation.</p>
-</dd>
-<dt>FlipLR</dt><dd><p>Flips images left-right.</p>
-</dd>
-<dt>FlipUD</dt><dd><p>Flips images up-down.</p>
-</dd>
-<dt>FlipDiagonal</dt><dd><p>Flips images diagonally.</p>
-</dd>
-</dl>
-</div>
+<p>Features that augment images.</p>
 <div class="section" id="module-classes">
 <h2>Module classes<a class="headerlink" href="#module-classes" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="affine">
@@ -366,17 +357,20 @@ image.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -398,34 +392,12 @@ image.</p>
 <h3>Augmentation<a class="headerlink" href="#augmentation" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.augmentations.Augmentation">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.augmentations.</code><code class="sig-name descname">Augmentation</code><span class="sig-paren">(</span><em class="sig-param">feature=None</em>, <em class="sig-param">load_size=1</em>, <em class="sig-param">updates_per_reload=1</em>, <em class="sig-param">update_properties=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.augmentations.Augmentation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.augmentations.</code><code class="sig-name descname">Augmentation</code><span class="sig-paren">(</span><em class="sig-param">time_consistent=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.augmentations.Augmentation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base abstract augmentation class.</p>
-<p>Augmentations are features that can resolve more than one image without
-calling <cite>.resolve()</cite> on the parent feature. Specifically, they create
-<cite>updates_per_reload</cite> images, while calling their parent feature
-<cite>load_size</cite> times. They achieve this by resolving <cite>load_size</cite> results
-from the parent feature at once, and randomly drawing one of these
-results as input to the method <cite>.get()</cite>. A new input is chosen
-every time <cite>.update()</cite> is called. Once <cite>.update()</cite> has been called
-<cite>updated_per_reload</cite> times, a new batch of <cite>load_size</cite> results are
-resolved from the parent feature.</p>
-<p>The method <cite>.get()</cite> of implementations of this class may accept the
-property <cite>number_of_updates</cite> as an argument. This number represents
-the number of times the <cite>.update()</cite> method has been called since the
-last time the parent feature was resolved.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>feature</strong><span class="classifier">Feature, optional, deprecated</span></dt><dd><p>DEPRECATED. The parent feature. If not passed, it acts like any other feature.</p>
-</dd>
-<dt><strong>load_size</strong><span class="classifier">int</span></dt><dd><p>Number of results to resolve from the parent feature.</p>
-</dd>
-<dt><strong>updates_per_reload</strong><span class="classifier">int</span></dt><dd><p>Number of times <cite>.update()</cite> is called before resolving new results
-from the parent feature.</p>
-</dd>
-<dt><strong>update_properties</strong><span class="classifier">Callable or None</span></dt><dd><p>Function called on the output of the method <cite>.get()</cite>. Overrides
-the default behaviour, allowing full control over how to update
-the properties of the output to account for the augmentation.</p>
+<dt><strong>time_consistend: boolean</strong></dt><dd><p>Whether to augment all images in a sequence equally.</p>
 </dd>
 </dl>
 </dd>
@@ -437,17 +409,20 @@ the properties of the output to account for the augmentation.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -481,7 +456,7 @@ If a tuple or list, it is assumed to be per axis.
 Can also be a function that returns any of the other types.</p>
 </dd>
 <dt><strong>crop_mode</strong><span class="classifier">str {“retain”, “remove”}</span></dt><dd><p>How the <cite>crop</cite> argument is interpreted. If “remove”, then
-<cite>crop</cite> denotes the amount to crop from the edges. If “retain”, 
+<cite>crop</cite> denotes the amount to crop from the edges. If “retain”,
 <cite>crop</cite> denotes the size of the output.</p>
 </dd>
 <dt><strong>corner</strong><span class="classifier">tuple of ints or Callable[Image]-&gt;tuple of ints or “random”</span></dt><dd><p>Top left corner of the cropped region. Can be a tuple of ints,
@@ -499,17 +474,20 @@ the modulo of the corner with the allowed region is used.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -550,17 +528,20 @@ A value of None or -1 indicates to skip that axis.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -637,17 +618,20 @@ i.e. <code class="docutils literal notranslate"><span class="pre">constant</span
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -669,7 +653,7 @@ i.e. <code class="docutils literal notranslate"><span class="pre">constant</span
 <h3>FlipDiagonal<a class="headerlink" href="#flipdiagonal" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.augmentations.FlipDiagonal">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.augmentations.</code><code class="sig-name descname">FlipDiagonal</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.augmentations.FlipDiagonal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.augmentations.</code><code class="sig-name descname">FlipDiagonal</code><span class="sig-paren">(</span><em class="sig-param">p=0.5</em>, <em class="sig-param">augment=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.augmentations.FlipDiagonal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flips images along the main diagonal.</p>
 <p>Updates all properties called “position” by swapping the first and second index.</p>
 <p class="rubric">Methods</p>
@@ -679,17 +663,20 @@ i.e. <code class="docutils literal notranslate"><span class="pre">constant</span
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -711,7 +698,7 @@ i.e. <code class="docutils literal notranslate"><span class="pre">constant</span
 <h3>FlipLR<a class="headerlink" href="#fliplr" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.augmentations.FlipLR">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.augmentations.</code><code class="sig-name descname">FlipLR</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.augmentations.FlipLR" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.augmentations.</code><code class="sig-name descname">FlipLR</code><span class="sig-paren">(</span><em class="sig-param">p=0.5</em>, <em class="sig-param">augment=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.augmentations.FlipLR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flips images left-right.</p>
 <p>Updates all properties called “position” to flip the second index.</p>
 <p class="rubric">Methods</p>
@@ -721,17 +708,20 @@ i.e. <code class="docutils literal notranslate"><span class="pre">constant</span
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -753,9 +743,9 @@ i.e. <code class="docutils literal notranslate"><span class="pre">constant</span
 <h3>FlipUD<a class="headerlink" href="#flipud" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.augmentations.FlipUD">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.augmentations.</code><code class="sig-name descname">FlipUD</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.augmentations.FlipUD" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.augmentations.</code><code class="sig-name descname">FlipUD</code><span class="sig-paren">(</span><em class="sig-param">p=0.5</em>, <em class="sig-param">augment=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.augmentations.FlipUD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flips images up-down.</p>
-<p>Updates all properties called “position” by flipping the first index.</p>
+<p>Updates all properties called “position” to flip the first index.</p>
 <p class="rubric">Methods</p>
 <table class="longtable table autosummary">
 <colgroup>
@@ -763,17 +753,20 @@ i.e. <code class="docutils literal notranslate"><span class="pre">constant</span
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -814,17 +807,20 @@ and is defined as (left, right, up, down, before_axis_3, after_axis_3, …)</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -865,17 +861,20 @@ A value of None or -1 indicates to skip that axis.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -893,27 +892,27 @@ A value of None or -1 indicates to skip that axis.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="preload">
-<h3>PreLoad<a class="headerlink" href="#preload" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="reuse">
+<h3>Reuse<a class="headerlink" href="#reuse" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="deeptrack.augmentations.PreLoad">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.augmentations.</code><code class="sig-name descname">PreLoad</code><span class="sig-paren">(</span><em class="sig-param">feature=None</em>, <em class="sig-param">load_size=1</em>, <em class="sig-param">updates_per_reload=1</em>, <em class="sig-param">update_properties=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.augmentations.PreLoad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simple storage with no augmentation.</p>
+<dt id="deeptrack.augmentations.Reuse">
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.augmentations.</code><code class="sig-name descname">Reuse</code><span class="sig-paren">(</span><em class="sig-param">feature</em>, <em class="sig-param">uses=2</em>, <em class="sig-param">storage=1</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.augmentations.Reuse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acts like cache.</p>
+<p><cite>Reuse</cite> stores the output of a feature and reuses it for subsequent calls, even if it is updated.
+This is can be used after a time-consuming feature to augment the output of the feature without
+recalculating it. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">Reuse</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">uses</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">dt</span><span class="o">.</span><span class="n">FlipLR</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here, the output of pipeline is used twice, augmented randomly by FlipLR.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>feature</strong><span class="classifier">Feature</span></dt><dd><p>The parent feature.</p>
+<dt><strong>feature</strong><span class="classifier">Feature</span></dt><dd><p>The feature to reuse.</p>
 </dd>
-<dt><strong>load_size</strong><span class="classifier">int</span></dt><dd><p>Number of results to resolve from the parent feature.</p>
+<dt><strong>uses</strong><span class="classifier">int</span></dt><dd><p>Number of each stored image uses before evaluating <cite>feature</cite>. Note that the actual total number of uses is <cite>uses * storage</cite>. Should be constant.</p>
 </dd>
-<dt><strong>updates_per_reload</strong><span class="classifier">int</span></dt><dd><p>Number of times <cite>.update()</cite> is called before resolving new results
-from the parent feature.</p>
-</dd>
-<dt><strong>index</strong><span class="classifier">int</span></dt><dd><p>The index of the image to grab from storage. By default a random image.</p>
-</dd>
-<dt><strong>update_properties</strong><span class="classifier">Callable or None</span></dt><dd><p>Function called on the output of the method <cite>.get()</cite>. Overrides
-the default behaviour, allowing full control over how to update
-the properties of the output to account for the augmentation.</p>
+<dt><strong>storage</strong><span class="classifier">int</span></dt><dd><p>Number of instances of the output of <cite>feature</cite> to cache. Should be constant.</p>
 </dd>
 </dl>
 </dd>
@@ -925,28 +924,20 @@ the properties of the output to account for the augmentation.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([image_list, _ID])</p></td>
+<td><p>Execute the feature or pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_arguments</span></code>(arguments)</p></td>
+<td><p>See <cite>features.Arguments</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([input_image, resolve_kwargs, interval])</p></td>
 <td><p>Visualizes the output of the feature.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code>([image_list])</p></td>
-<td><p>Creates the image.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(**kwargs)</p></td>
-<td><p>Returns the feature</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**kwargs)</p></td>
-<td><p>Updates the state of all properties.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="table">
-<colgroup>
-<col style="width: 68%" />
-<col style="width: 32%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><strong>update_properties</strong></p></td>
-<td></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(**_)</p></td>
+<td><p>Refresh the feature to create a new image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -963,7 +954,7 @@ the properties of the output to account for the augmentation.</p>
               <div class='prev-next-bottom'>
                 
     <a class='left-prev' id="prev-link" href="aberrations.html" title="previous page">aberrations</a>
-    <a class='right-next' id="next-link" href="features.html" title="next page">features</a>
+    <a class='right-next' id="next-link" href="elementwise.html" title="next page">elementwise</a>
 
               </div>
               

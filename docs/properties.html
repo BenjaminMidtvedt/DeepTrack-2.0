@@ -112,6 +112,11 @@
   </a>
  </li>
  <li class="toctree-l2">
+  <a class="reference internal" href="elementwise.html">
+   elementwise
+  </a>
+ </li>
+ <li class="toctree-l2">
   <a class="reference internal" href="features.html">
    features
   </a>
@@ -119,6 +124,11 @@
  <li class="toctree-l2">
   <a class="reference internal" href="generators.html">
    generators
+  </a>
+ </li>
+ <li class="toctree-l2">
+  <a class="reference internal" href="holography.html">
+   holography
   </a>
  </li>
  <li class="toctree-l2">
@@ -172,6 +182,11 @@
   </a>
  </li>
  <li class="toctree-l2">
+  <a class="reference internal" href="statistics.html">
+   statistics
+  </a>
+ </li>
+ <li class="toctree-l2">
   <a class="reference internal" href="test.html">
    test
   </a>
@@ -203,11 +218,6 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#classes">
-   Classes
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-classes">
    Module classes
   </a>
@@ -225,6 +235,18 @@
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#sequentialproperty">
      SequentialProperty
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-functions">
+   Module functions
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#propagate-data-to-dependencies">
+     propagate_data_to_dependencies
     </a>
    </li>
   </ul>
@@ -249,53 +271,25 @@
   <div class="section" id="module-deeptrack.properties">
 <span id="properties"></span><h1>properties<a class="headerlink" href="#module-deeptrack.properties" title="Permalink to this headline">¶</a></h1>
 <p>Tools to manage the properties of a feature</p>
-<div class="section" id="classes">
-<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
-<dl class="simple">
-<dt>Property</dt><dd><p>The class <cite>Property</cite>, which represents the values of a property of a feature.
-A Property be:
-* A constant (initialization with, e.g., a number, a tuple)
-* A sequence of variables (initialization with, e.g., an iterator)
-* A random variable (initialization with, e.g., a function)</p>
-</dd>
-<dt>SequentialProperty</dt><dd><p>The class <cite>SequentialProperty</cite>, which extends <cite>Property</cite> to sample one value
-for each step in a sequence.</p>
-</dd>
-<dt>PropertyDict</dt><dd><p>The class <cite>PropertyDict</cite>, which is a dictionary with each element a Property.
-The class provides utility functions to update, sample, clear and retrieve
-properties.</p>
-</dd>
-</dl>
-</div>
 <div class="section" id="module-classes">
 <h2>Module classes<a class="headerlink" href="#module-classes" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="property">
 <h3>Property<a class="headerlink" href="#property" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.properties.Property">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.properties.</code><code class="sig-name descname">Property</code><span class="sig-paren">(</span><em class="sig-param">sampling_rule</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.Property" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represents a property of a feature</p>
-<p>The class Property` wraps an input, which is treated
-internally as a sampling rule. This sampling rule is used
-to update the value of the property.
-The sampling rule can be, for example:
-* A constant (initialization with, e.g., a number, a tuple)
-* A sequence of variables (initialization with, e.g., a generator)
-* A discrete random variable (initialization with, e.g., a list, a dictionary)
-* A continuous random variable (initialization with, e.g., a function)</p>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.properties.</code><code class="sig-name descname">Property</code><span class="sig-paren">(</span><em class="sig-param">sampling_rule</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.Property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that defines a property of a feature.</p>
+<p>A property contains one argument for evaluating feature. It can be a constant, a function, a list,
+a tuple, a numpy array, a slice, a dictionary, a DeepTrackNode (such as another property or feature),
+or a generator. If it is a function, it can have the names of other properties of the same feature as arguments.
+The output of the function is the value of the property. If it is a list, each element of the list will be sampled individually.
+If it is a dictionary, each value of the dictionary will be sampled individually. If it is a tuple or an array, it will be treated as a constant.
+If it is a slice, the start, stop and step will be sampled individually. If it is a generator, the next value will be sampled.
+When the generator is exhausted, it will yield the final value infinitely.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>sampling_rule</strong><span class="classifier">any</span></dt><dd><p>Defines the sampling rule to update the value of the feature property.
-See method <cite>sample()</cite> for how different sampling rules are sampled.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Attributes</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>sampling_rule</strong><span class="classifier">any</span></dt><dd><p>The sampling rule to update the value of the feature property.</p>
-</dd>
-<dt><strong>current_value</strong><span class="classifier">any</span></dt><dd><p>The current value obtained from the last call to the sampling rule.</p>
+<dt><strong>sampling_rule</strong><span class="classifier">function, list, tuple, numpy array, slice, dictionary, DeepTrackNode, or generator</span></dt><dd><p>The rule to sample the property.</p>
 </dd>
 </dl>
 </dd>
@@ -307,82 +301,25 @@ See method <cite>sample()</cite> for how different sampling rules are sampled.</
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deeptrack.properties.Property.sample" title="deeptrack.properties.Property.sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code></a>(sampling_rule, **kwargs)</p></td>
-<td><p>Samples the sampling rule</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([_ID])</p></td>
+<td><p>Call self as a function.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#deeptrack.properties.Property.update" title="deeptrack.properties.Property.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(**kwargs)</p></td>
-<td><p>Updates the current value</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="deeptrack.properties.Property.sample">
-<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param">sampling_rule</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.Property.sample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Samples the sampling rule</p>
-<p>Returns a sampled instance of the <cite>sampling_rule</cite> field.
-The logic behind the sampling depends on the type of
-<cite>sampling_rule</cite>. These are checked in the following order of
-priority:</p>
-<ol class="arabic simple">
-<li><dl class="simple">
-<dt>Any object with a callable <cite>sample()</cite> method has this</dt><dd><p>method called and returned.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>If the rule is a <code class="docutils literal notranslate"><span class="pre">dict</span></code>, sample each value and combine the</dt><dd><p>result into a new <code class="docutils literal notranslate"><span class="pre">dict</span></code> using the original keys.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>If the rule is a <code class="docutils literal notranslate"><span class="pre">list</span></code>, sample each element of the list and</dt><dd><p>combine the result into a ne <code class="docutils literal notranslate"><span class="pre">list</span></code>.</p>
-</dd>
-</dl>
-</li>
-<li><p>If the rule is an <code class="docutils literal notranslate"><span class="pre">iterable</span></code>, return the next output.</p></li>
-<li><dl class="simple">
-<dt>If the rule is callable, call it with its accepted arguments.</dt><dd><p>Example arguments can be the value of some other property.</p>
-</dd>
-</dl>
-</li>
-<li><p>If none of the above apply, return the rule itself.</p></li>
-</ol>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>sampling_rule</strong><span class="classifier">any</span></dt><dd><p>The rule to sample values from.</p>
-</dd>
-<dt><strong>**kwargs</strong></dt><dd><p>Arguments that will be passed on to functions that accepts them.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>any</dt><dd><p>A sampled instance of the <cite>sampling_rule</cite>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="deeptrack.properties.Property.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.Property.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the current value</p>
-<p>The method <cite>update()</cite> sets the property <cite>current_value</cite>
-as the output of the method <cite>sample()</cite>. Will only update
-once per resolve.</p>
-<p>Any object that implements the method <cite>update()</cite> will have it called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>Property</dt><dd><p>Returns itself.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
+<table class="table">
+<colgroup>
+<col style="width: 63%" />
+<col style="width: 37%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>create_action</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -390,7 +327,7 @@ once per resolve.</p>
 <h3>PropertyDict<a class="headerlink" href="#propertydict" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.properties.PropertyDict">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.properties.</code><code class="sig-name descname">PropertyDict</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.PropertyDict" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.properties.</code><code class="sig-name descname">PropertyDict</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.PropertyDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary with Property elements</p>
 <p>A dictionary of properties. It provides utility functions to update,
 sample, reset and retrieve properties.</p>
@@ -409,113 +346,44 @@ sample, reset and retrieve properties.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([_ID])</p></td>
+<td><p>Call self as a function.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deeptrack.properties.PropertyDict.current_value_dict" title="deeptrack.properties.PropertyDict.current_value_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">current_value_dict</span></code></a>(**kwargs)</p></td>
-<td><p>Retrieves the current value of all properties as a dictionary</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fromkeys</span></code>(iterable[, value])</p></td>
+<td><p>Create a new dictionary with keys from iterable and values set to value.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fromkeys</span></code>(/, iterable[, value])</p></td>
-<td><p>Create a new ordered dictionary with keys from iterable and values set to value.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">items</span></code>()</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">items</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code>()</p></td>
 <td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_to_end</span></code>(/, key[, last])</p></td>
-<td><p>Move an existing element to the end (or beginning if last is false).</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code>(k[,d])</p></td>
-<td><p>value.</p></td>
+<td><p>If key is not found, d is returned if given, otherwise KeyError is raised</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">popitem</span></code>(/[, last])</p></td>
-<td><p>Remove and return a (key, value) pair from the dictionary.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">popitem</span></code>(/)</p></td>
+<td><p>Remove and return a (key, value) pair as a 2-tuple.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#deeptrack.properties.PropertyDict.sample" title="deeptrack.properties.PropertyDict.sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code></a>(**kwargs)</p></td>
-<td><p>Samples all properties</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setdefault</span></code>(/, key[, default])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setdefault</span></code>(key[, default])</p></td>
 <td><p>Insert key with a value of default if key is not in the dictionary.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#deeptrack.properties.PropertyDict.update" title="deeptrack.properties.PropertyDict.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(**kwargs)</p></td>
-<td><p>Updates all properties</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deeptrack.properties.PropertyDict.update_item" title="deeptrack.properties.PropertyDict.update_item"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_item</span></code></a>(item, **kwargs)</p></td>
-<td><p>Updates a single property.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>([E, ]**F)</p></td>
+<td><p>If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k] If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v In either case, this is followed by: for k in F:  D[k] = F[k]</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="deeptrack.properties.PropertyDict.current_value_dict">
-<code class="sig-name descname">current_value_dict</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.PropertyDict.current_value_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieves the current value of all properties as a dictionary</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>dict</dt><dd><p>A dictionary with the current value of all properties</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="deeptrack.properties.PropertyDict.sample">
-<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.PropertyDict.sample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Samples all properties</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>dict</dt><dd><p>A dictionary with each key-value pair the result of a
-<cite>sample()</cite> call on the property with the same key.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="deeptrack.properties.PropertyDict.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.PropertyDict.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates all properties</p>
-<p>Calls the method <cite>update()</cite> on each property in the dictionary.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>Properties</dt><dd><p>Returns itself</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="deeptrack.properties.PropertyDict.update_item">
-<code class="sig-name descname">update_item</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.PropertyDict.update_item" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates a single property.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item: Property</strong></dt><dd><p>The item to update.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>self</dt><dd></dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -523,26 +391,14 @@ sample, reset and retrieve properties.</p>
 <h3>SequentialProperty<a class="headerlink" href="#sequentialproperty" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="deeptrack.properties.SequentialProperty">
-<em class="property">class </em><code class="sig-prename descclassname">deeptrack.properties.</code><code class="sig-name descname">SequentialProperty</code><span class="sig-paren">(</span><em class="sig-param">sampling_rule</em>, <em class="sig-param">initializer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.SequentialProperty" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">deeptrack.properties.</code><code class="sig-name descname">SequentialProperty</code><span class="sig-paren">(</span><em class="sig-param">initialization=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.SequentialProperty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Property that has multiple sequential values</p>
 <p>Extends standard <cite>Property</cite> to resolve one value for each step
 in a sequence of images. This is often used when creating movies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>initializer</strong><span class="classifier">any</span></dt><dd><p>Sampling rule for the first step of the sequence.</p>
-</dd>
-<dt><strong>sampling_rule</strong><span class="classifier">any</span></dt><dd><p>Sampling rule for each step after the first.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Attributes</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>initializer</strong><span class="classifier">any</span></dt><dd><p>Sampling rule for the first step of the sequence.</p>
-</dd>
-<dt><strong>sampling_rule</strong><span class="classifier">any</span></dt><dd><p>Sampling rule for each step after the first.</p>
-</dd>
-<dt><strong>has_updated_since_last_resolve</strong><span class="classifier">bool</span></dt><dd><p>Whether the property has been updated since the last resolve.</p>
+<dt><strong>initialization</strong><span class="classifier">any</span></dt><dd><p>Sampling rule for the first step of the sequence.</p>
 </dd>
 </dl>
 </dd>
@@ -554,47 +410,47 @@ in a sequence of images. This is often used when creating movies.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(sampling_rule, **kwargs)</p></td>
-<td><p>Samples the sampling rule</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>([_ID])</p></td>
+<td><p>Call self as a function.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#deeptrack.properties.SequentialProperty.update" title="deeptrack.properties.SequentialProperty.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>([sequence_length])</p></td>
-<td><p>Updates current_value</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_citations</span></code>()</p></td>
+<td><p>Gets a set of citations for all objects in a pipeline.</p></td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="deeptrack.properties.SequentialProperty.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">sequence_length=0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.SequentialProperty.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates current_value</p>
-<p>For each step in the sequence, sample <cite>self.sampling_rule</cite>.
-<cite>self.initializer</cite> is used for the first step. These rules
-should output one value per step. Sampling rules
-that are functions can optionally accept the following keyword
-arguments:</p>
-<ul class="simple">
-<li><p>sequence_step : the current position in the sequence.</p></li>
-<li><p>sequence_length : the length of the sequence.</p></li>
-<li><p>previous_value : the value of the property at the previous
-step in the sequence.</p></li>
-<li><p>previous_values : the value of the property at all previous
-steps in the sequence.</p></li>
-</ul>
+<table class="table">
+<colgroup>
+<col style="width: 63%" />
+<col style="width: 37%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>create_action</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-functions">
+<h2>Module functions<a class="headerlink" href="#module-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="propagate-data-to-dependencies">
+<h3>propagate_data_to_dependencies<a class="headerlink" href="#propagate-data-to-dependencies" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="deeptrack.properties.propagate_data_to_dependencies">
+<code class="sig-prename descclassname">deeptrack.properties.</code><code class="sig-name descname">propagate_data_to_dependencies</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#deeptrack.properties.propagate_data_to_dependencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates the dependencies of a feature and sets the value of their properties to the values in kwargs</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>sequence_length</strong><span class="classifier">int, optional</span></dt><dd><p>length of the sequence</p>
+<dt><strong>X</strong><span class="classifier">features.Feature</span></dt><dd><p>The feature whose dependencies are to be updated</p>
 </dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>self</dt><dd><p>returns self</p>
+<dt><strong>kwargs</strong><span class="classifier">dict</span></dt><dd><p>The values to be set for the properties of the dependencies.</p>
 </dd>
 </dl>
 </dd>
 </dl>
-</dd></dl>
-
 </dd></dl>
 
 </div>
