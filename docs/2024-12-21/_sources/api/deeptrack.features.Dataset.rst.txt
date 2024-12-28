@@ -1,0 +1,23 @@
+Dataset
+=======
+
+.. currentmodule:: deeptrack.features
+
+.. autoclass:: Dataset
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~Dataset.get
+      ~Dataset.get_next_output
+      ~Dataset.reset_dataset
+      ~Dataset.take
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: get
+   .. automethod:: get_next_output
+   .. automethod:: reset_dataset
+   .. automethod:: take

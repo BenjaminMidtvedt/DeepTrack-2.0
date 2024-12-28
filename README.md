@@ -1,179 +1,330 @@
-<p align="center">
-  <img width="350" src=https://github.com/softmatterlab/DeepTrack-2.0/blob/master/assets/logo.png?raw=true>
-</p>
+# Documentation Setup and Automation Guide
 
-DeepTrack is a comprehensive deep learning framework for digital microscopy.
-We provide tools to create physical simulations of customizable optical systems, to generate and train neural network models, and to analyze experimental data.
+This guide explains how to set up and maintain documentation for your Python library in a dedicated `docs` branch with GitHub Pages. It also details how all the steps, once configured, are automated via a GitHub Actions workflow that updates and builds documentation upon new releases.
 
-# Note!
+For example, for the repository **https://"https://github.com/ORGANIZATION/REPO/** the corresponding GitHub documentation page will be **https://"https://ORGANIZATION.github.io/REPO/**.
 
-This branch is a developmental branch preparing for the next major release. While the branch should be working at any point in time, many features may be developmental and are subject to change.
+Key points:
+- **Dedicated `docs` branch**: The documentation is served from the `docs` folder on the `docs` branch, utilizing GitHub Pages (so that it's updated automatically in the GitHub page when this folder is changed through a push).
+- **Automated `.rst` File Generation**: A Python script (`generate_doc_markdown.py`) scans your codebase and generates the `.rst` files automatically.
+- **Sphinx & Extensions**: Use Sphinx, `sphinx-automodapi`, and `pydata-sphinx-theme` to build the docs.
+- **CI/CD with GitHub Actions**: Once set up, the provided GitHub Actions workflow automatically updates the documentation every time a new release of the repository is published.
 
-## Roadmap
+Logical flow of documentation updates:
+1. **Initial Setup**: Configure `docs` branch, Sphinx, and dependencies.
+2. **Automated `.rst` Generation**: Use `generate_doc_markdown.py` to generate `.rst` files from code.
+3. **Building Locally (if needed)**: `make html` to verify documentation locally.
+4. **Release Trigger**: On publishing a new release, the GitHub Actions workflow:
+   - Checks out `docs` branch and release code.
+   - Generates `.rst` files.
+   - Builds HTML docs.
+   - Deploys the updated docs to `docs/latest` and `docs/<version>`.
+5. **Automatic Deployment**: Changes are committed back to `docs` branch and served on GitHub Pages.
 
-### New Features!
+## 1. Create the `docs` Branch on GitHub
 
-- [ ] Full GPU support.
-  - [ ] Infer cupy support during import.
-  - [ ] Allow separate GPU/CPU methods for optimization.
-  - [ ] Integrated benchmarking.
-  - [ ] Allow forcefully overriding CPU/GPU state.
-  - [ ] Disable/enable GPU using environment variables.
-- [ ] Simulation-parameters optimization
-  - [ ] Grid search
-  - [ ] Genetic optimization
-  - [ ] Independent variables assumption
-- [ ] Architecure searches.
-- [ ] Common architectures with pre-trained weights.
-- [ ] Label free training of particle tracking models
-- [ ] Particle tracing / linking
-- [ ] Export to DeepImageJ
+- Create a `docs` branch in your repository.
+- Go to the repository’s **Settings**.
+- Under **Pages**, configure the site to be served from the `docs/` folder on the `docs` branch.
 
-### Usage improvements
+## 2. Clean the `docs` Branch
 
-- [ ] Move from .resolve() to \_\_call\_\_ as primary evalution method.
-  - [ ] Features can be passed as properties, and will be resolved with no input.
-  - [ ] Implement way to bypass the property evaluation (better than wrapping in lambda).
-- [ ] Facilitate the construction of compound shapes.
-  - [ ] Separate Scatterers into Geometry and Scatterers
-  - [ ] Compund shape using dt.Scatter.
-  - [ ] Implement \_\_sub\_\_, which sets everything within it to 0.
-  - [ ] All optics wraps the sample as a dt.Scatter, which produces a volume.
-- [ ] Allow for modular creation of optics pipeline.
-  - [ ] Separately define the pupil, the input illumination, the simulation method and the sample.
-  - [ ] Test simulations against theory to ensure that they work as expected.
-- [ ] Deprecate \* shorthand for probability and instead use it as shorthand for multiplication.
+- In the `docs` branch, delete all files except for `.gitignore` (and of course `.git`).
+- The branch should now be nearly empty, ready for the documentation setup.
 
-### Misc
+## 3. Configuring Sphinx
 
-- [ ] Implement rigorous and transparent error handling.
-- [ ] Expand and standardize unittests.
-- [ ] Better utilize continuous integration.
-- [ ] Expand documentation with examples of each feature.
+You need to perform the following steps checking out the `docs` branch of your repo.
 
-# Getting started
+**Install Dependencies:**
 
-## Installation
+```bash
+pip install sphinx sphinx-automodapi pydata-sphinx-theme
+```
 
-DeepTrack 2.0 requires at least python 3.6
+**Run `sphinx-quickstart`:**
 
-To install DeepTrack 2.0, open a terminal or command prompt and run
+```bash
+sphinx-quickstart
+```
 
-    pip install deeptrack
+If the command is not found:
 
-## Learning DeepTrack 2.0
+```bash
+python -m sphinx.cmd.quickstart
+```
 
-Everybody learns in different ways! Depending on your preferences, and what you want to do with DeepTrack, you may want to check out one or more of these resources.
+This generates:
 
-### Fundamentals
+- `conf.py` (Sphinx configuration file)
+- `Makefile`
+- `index.rst`
+- `make.bat`
 
-First, we have a very general walkthrough of [basic](https://softmatterlab.github.io/DeepTrack-2.0/basics.html) and [advanced](https://softmatterlab.github.io/DeepTrack-2.0/advanced.html) topics. This is a 5-10 minute read, that well get you well on your way to understand the unique interactions available in DeepTrack.
+**Edit `conf.py`:**
 
-### DeepTrack 2.0 in action
+- Add your code to `sys.path` so Sphinx can locate it:
+  
+  ```python
+  import sys
+  sys.path.insert(0, "release-code")
+  ```
 
-To see DeepTrack in action, we provide six well documented tutorial notebooks that create simulation pipelines and train models:
+- Add code to get the release from enviroment variable:
+  
+  ```python
+  import os
 
-1. [deeptrack_introduction_tutorial](tutorials/deeptrack_introduction_tutorial.ipynb) gives an overview of how to use DeepTrack 2.0.
-2. [tracking_particle_cnn_tutorial](tutorials/tracking_particle_cnn_tutorial.ipynb) demonstrates how to track a point particle with a convolutional neural network (CNN).
-3. [tracking_multiple_particles_unet_tutorial](tutorials/tracking_multiple_particles_unet_tutorial.ipynb) demonstrates how to track multiple particles using a U-net.
-4. [characterizing_aberrations_tutorial](tutorials/characterizing_aberrations_tutorial.ipynb) demonstrates how to add and characterize aberrations of an optical device.
-5. [distinguishing_particles_in_brightfield_tutorial](tutorials/distinguishing_particles_in_brightfield_tutorial.ipynb) demonstrates how to use a U-net to track and distinguish particles of different sizes in brightfield microscopy.
-6. [analyzing_video_tutorial](tutorials/analyzing_video_tutorial.ipynb) demonstrates how to create videos and how to train a neural network to analyze them.
+  # get release from environment variable
+  version = os.environ.get("VERSION", "")
+  if not version:
+      print("Error: VERSION environment variable not set.")
+      sys.exit(1)
+  ```
 
-Additionally, we have seven more case studies which are less documented, but gives additional insight in how to use DeepTrack with real datasets
+- Edit/Add the version number to appear in the title:
 
-1. [![](https://colab.research.google.com/assets/colab-badge.svg) MNIST](https://colab.research.google.com/drive/1dRehGzf9DNpz7Jo2dw4U6vSyE4STZgpF?usp=sharing) classifies handwritted digits.
-2. [![](https://colab.research.google.com/assets/colab-badge.svg) single particle tracking](https://colab.research.google.com/drive/1rh46w8TuJDF0mnvLpo6dlWkLiLr7MmQ9?usp=sharing) tracks experimentally captured videos of a single particle. (Requires opencv-python compiled with ffmpeg to open and read a video.)
-3. [![](https://colab.research.google.com/assets/colab-badge.svg) single particle sizing](https://colab.research.google.com/drive/1U12f3m3oLKCGp-BAERGrwjMhEZdkWvT5?usp=sharing) extracts the radius and refractive index of particles.
-4. [![](https://colab.research.google.com/assets/colab-badge.svg) multi-particle tracking](https://colab.research.google.com/drive/1TpNZ6ytoDXSZvGDFAFWrSjNs4SXGZmBw?usp=sharing) detects quantum dots in a low SNR image.
-5. [![](https://colab.research.google.com/assets/colab-badge.svg) 3-dimensional tracking](https://colab.research.google.com/drive/1QJXPxsVeDt1ZW1685D5VANsME69s3mqi?usp=sharing) tracks particles in three dimensions.
-6. [![](https://colab.research.google.com/assets/colab-badge.svg) cell counting](https://colab.research.google.com/drive/1C2Gn1Ym8etycOYW9yfDB_WiKlEeyvLtp?usp=sharing) counts the number of cells in fluorescence images.
-7. [![](https://colab.research.google.com/assets/colab-badge.svg) GAN image generation](https://colab.research.google.com/drive/1rfFbeE-qkg3PxHBEa_r7Q9wXq0vdueEC?usp=sharing) uses a GAN to create cell image from masks.
+  ```python
+  release = version
+  ```
 
-### Video Tutorials
+- Add required extensions:
 
-DeepTrack 2.0 introduction tutorial video: https://youtu.be/hyfaxF8q6VE  
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=hyfaxF8q6VE
-" target="_blank"><img src="https://img.youtube.com/vi/hyfaxF8q6VE/maxresdefault.jpg" 
-alt="Tutorial" width="384" height="216" border="10" /></a>
+  ```python
+  extensions = ["sphinx_automodapi.automodapi", "sphinx.ext.githubpages"]
+  numpydoc_show_class_members = False
+  automodapi_inheritance_diagram = False
+  ```
 
-DeepTrack 2.0 recognizing handwritten digits tutorial video: https://youtu.be/QD9JUXyLJpc  
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=QD9JUXyLJpc
-" target="_blank"><img src="https://img.youtube.com/vi/QD9JUXyLJpc/maxresdefault.jpg" 
-alt="Tutorial" width="384" height="216" border="10" /></a>
+- Set the theme and options (**change ORGANIZATION and REPO as needed**):
 
-DeepTrack 2.0 single particle tracking tutorial video: https://youtu.be/6Cntik6AfBI  
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=6Cntik6AfBI
-" target="_blank"><img src="https://img.youtube.com/vi/6Cntik6AfBI/maxresdefault.jpg" 
-alt="Tutorial" width="384" height="216" border="10" /></a>
+  ```python
+  html_theme = "pydata_sphinx_theme"
+  html_static_path = ["_static"]
+  html_theme_options = {
+      "switcher": {
+          "json_url": "https://ORGANIZATION.github.io/REPO/latest/_static/switcher.json",
+          "version_match": version,
+      },
+      "navbar_end": [
+          "version-switcher",
+          "navbar-icon-links",
+      ],
+  }
+  ```
 
-DeepTrack 2.0 single-particle characterization tutorial video: https://youtu.be/ia2H1QO1cHg  
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=ia2H1QO1cHg
-" target="_blank"><img src="https://img.youtube.com/vi/ia2H1QO1cHg/maxresdefault.jpg" 
-alt="Tutorial" width="384" height="216" border="10" /></a>
+**Create/edit `index.rst`:**
 
-DeepTrack 2.0 multiple particle tracking tutorial video: https://youtu.be/wFV2VqzpeZs  
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=wFV2VqzpeZs
-" target="_blank"><img src="https://img.youtube.com/vi/wFV2VqzpeZs/maxresdefault.jpg" 
-alt="Tutorial" width="384" height="216" border="10" /></a>
+Place an `index.rst` file at the root of the `docs` branch:
 
-DeepTrack 2.0 multiple particle tracking in 3D tutorial video: https://youtu.be/fzD1QIEIJ04  
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=fzD1QIEIJ04
-" target="_blank"><img src="https://img.youtube.com/vi/fzD1QIEIJ04/mqdefault.jpg" 
-alt="Tutorial" width="384" height="216" border="10" /></a>
+```rst
+.. yourproject documentation master file.
 
-DeepTrack 2.0 cell counting tutorial video: https://youtu.be/C6hu_IYoWtI  
-<a href="https://www.youtube.com/watch?feature=player_embedded&v=C6hu_IYoWtI
-" target="_blank"><img src="https://img.youtube.com/vi/C6hu_IYoWtI/mqdefault.jpg" 
-alt="Tutorial" width="384" height="216" border="10" /></a>
+yourproject documentation
+=========================
 
-DeepTrack 2.0 GAN image generation tutorial video: https://youtu.be/8g44Yks7cis  
-<a href="https://www.youtube.com/watch?feature=player_embedded&v=8g44Yks7cis
-" target="_blank"><img src="https://img.youtube.com/vi/8g44Yks7cis/mqdefault.jpg" 
-alt="Tutorial" width="384" height="216" border="10" /></a>
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
 
-### In-depth dives
+   src/Documentation
+```
 
-The examples folder contains notebooks which explains the different modules in more detail. These can be read in any order, but we provide a recommended order where more fundamental topics are introduced early.
-This order is as follows:
+## 4. Copy the File to Generate `.rst` Files with the Script
 
-1. [features_example](examples/features_example.ipynb)
-2. [properties_example](examples/properties_example.ipynb)
-3. [scatterers_example](examples/scatterers_example.ipynb)
-4. [optics_example](examples/optics_example.ipynb)
-5. [aberrations_example](examples/aberrations_example.ipynb)
-6. [noises_example](examples/noises_example.ipynb)
-7. [augmentations_example](examples/augmentations_example.ipynb)
-8. [image_example](examples/image_example.ipynb)
-9. [generators_example](examples/generators_example.ipynb)
-10. [models_example](examples/models_example.ipynb)
-11. [losses_example](examples/losses_example.ipynb)
-12. [utils_example](examples/utils_example.ipynb)
-13. [sequences_example](examples/sequences_example.ipynb)
-14. [math_example](examples/math_example.ipynb)
+Copy the Python script `generate_doc_markdown.py` to automate the `.rst` creation into the root folder of the `docs`branch.
 
-## Graphical user interface
+> This will automate the `.rst` creation. It:
+>
+> - Identifies top-level modules and packages in `release-code/<library_name>`.
+> - Generates `.rst` files for each module.
+> - Creates a `Documentation.rst` that acts as a table of contents.
+> 
+> **Usage:**
+> 
+> ```bash
+> python generate_doc_markdown.py <library_name> [--force] [--exclude=mod1,mod2,...] [--output-dir=src]
+> ```
+> 
+> **Arguments:**
+> 
+> - `<library_name>`: The name of your library (the folder under `release-code`).
+> - `--force` / `-f`: Overwrite existing `.rst` files if present.
+> - `--exclude` / `-e`: Exclude specific submodules from documentation.
+> - `--output-dir` / `-o`: Directory to write output files, default is `src`.
+> 
+> **Example:**
+> 
+> ```bash
+> python generate_doc_markdown.py deeplay --force --exclude=_internal --output-dir=src
+> ```
+> 
+> This command creates the `src` folder (if needed), generates `.rst` files for each module, and updates `Documentation.rst` automatically.
 
-DeepTrack 2.0 provides a completely stand-alone [graphical user interface](https://github.com/softmatterlab/DeepTrack-2.0-app), which delivers all the power of DeepTrack without requiring programming knowledge.
+## 5. Add the Version Switcher
 
-[![InterfaceDemo](https://i.imgur.com/lTy2vhz.gif)](https://i.imgur.com/lTy2vhz.gif)
+Add the version switcher `switcher.json` to the folder `_static`of the `docs`branch.
 
-## Documentation
+```
+[]
+```
 
-The detailed documentation of DeepTrack 2.0 is available at the following link: https://softmatterlab.github.io/DeepTrack-2.0/deeptrack.html
 
-## Cite us!
+> The version switcher allows users to navigate between different versions of your documentation directly from the site’s navigation bar. This is handled by the switcher.json file, stored in _static/switcher.json, which follows a structure like:
+> 
+> ```
+> [
+>   {
+>     "name": "0.1.0",
+>     "version": "0.1.0",
+>     "url": "https://ORGANIZATION.github.io/REPO/0.1.0/"
+>   }
+> ]
+> ```
+> 
+> How it works:
+> 
+>     Each entry in switcher.json specifies a documentation version and the URL where it can be found.
+>     The html_theme_options in conf.py references this file, enabling a dropdown menu to choose the version.
+>     The GitHub Actions workflow updates switcher.json upon new releases by prepending the new version into this list. This ensures that the newly released version appears in the version switcher, and users can easily switch to it.
 
-If you use DeepTrack 2.0 in your project, please cite us here:
+## 6. Add the Following Files
 
-    Benjamin Midtvedt, Saga Helgadottir, Aykut Argun, Jesús Pineda, Daniel Midtvedt, Giovanni Volpe. "Quantitative Digital Microscopy with Deep Learning." [arXiv:2010.08260](https://arxiv.org/abs/2010.08260)
+- **`doc_requirements.txt`**: Lists the dependencies (Sphinx, sphinx-automodapi, pydata-sphinx-theme, etc.) needed to build documentation.
 
-See also:
+- **`docs`** folder: Where documentation content and builds are hosted. This should include **index.html.** (to redirect to the `docs/latest` folder) and **.nojekyll** (to prevent GitHub Pages from ignoring _static and other files that begin with an underscore).
 
-    Saga Helgadottir, Aykut Argun, and Giovanni Volpe. "Digital video microscopy enhanced by deep learning." Optica 6.4 (2019): 506-513. [10.1364/OPTICA.6.000506](https://doi.org/10.1364/OPTICA.6.000506)
+## 7. Ensure All Special Files Are Set Up in the `docs` Branch
 
-    Saga Helgadottir, Aykut Argun, and Giovanni Volpe. "DeepTrack." https://github.com/softmatterlab/DeepTrack.git (2019).
+Ensure that all these files have been correctly prepared:
+- **`docs`** folder: Where documentation content and builds are hosted. This should include **index.html.** (to redirect to the `docs/latest` folder) and **.nojekyll** (to prevent GitHub Pages from ignoring _static and other files that begin with an underscore).
+- **`index.rst`**: Root documentation file linking to `Documentation.rst`.
+- **`conf.py`**: Sphinx configuration file where you set up paths, extensions, and themes.
+- **`generate_doc_markdown.py`**: Automation script that eliminates the need for manual `.rst` creation.
+- **`doc_requirements.txt`**: Lists the dependencies (Sphinx, sphinx-automodapi, pydata-sphinx-theme, etc.) needed to build documentation.
+- **`Makefile`**: Provides convenient commands (`make html`) to build the docs locally.
+- **`_static/switcher.json`**: Used for version switching within the docs (managed by the workflow).
+- **`README.md`**: Copy this readme file as well into the `docs`branch.
 
-## Funding
+## 8. Add Worflow for Automated Documentation on Release
 
-This work was supported by the ERC Starting Grant ComplexSwimmers (Grant No. 677511).
+Add the `docs.yml` to the `.github/workflows/docs.yml` folder of the branch of your project from which the release will be made.
+
+In the code below, ensure that PYTHON_PACKAGE, ORGANIZATON and REPO are the correct ones. Other minor changes might be needed (e.g., Python version).
+
+> This workflow:
+> 
+> 1. Checks out the `docs` branch.
+> 2. Sets up Python and installs dependencies from `requirements.txt`.
+> 3. Checks out the release code (tag specified by the release event) into `release-code`.
+> 4. Runs the `generate_doc_markdown.py` script to generate/update `.rst` files.
+> 5. Builds the Sphinx documentation.
+> 6. Copies the built HTML files to `docs/latest` and `docs/{version}` directories.
+> 7. Commits and pushes these changes back to the `docs` branch, updating the live documentation on GitHub Pages.
+> 
+> **Example Workflow (in `.github/workflows/docs.yml`):**
+> 
+> ```yaml
+> name: Update Documentation
+> 
+> on:
+>   release:
+>     types:
+>       - published
+>   workflow_dispatch:
+>     inputs:
+>       test_tag:
+>         description: "Release tag to simulate"
+>         required: true
+> 
+> jobs:
+>   update-docs:
+>     name: Update Documentation
+>     runs-on: ubuntu-latest
+> 
+>     steps:
+>       # Step 1: Check out the docs branch
+>       - name: Checkout docs branch
+>         uses: actions/checkout@v3
+>         with:
+>           ref: docs
+> 
+>       # Step 2: Set up Python
+>       - name: Set up Python
+>         uses: actions/setup-python@v4
+>         with:
+>           python-version: "3.9"
+> 
+>       # Step 3: Install dependencies
+>       - name: Install dependencies
+>         run: |
+>           python -m pip install --upgrade pip
+>           pip install -r doc_requirements.txt
+> 
+>       # Step 4: Pull the release code into a separate directory
+>       - name: Checkout release code
+>         uses: actions/checkout@v3
+>         with:
+>           path: release-code
+>           # Use the test tag from workflow_dispatch or the actual release tag
+>           ref: ${{ github.event.inputs.test_tag || github.event.release.tag_name }}
+> 
+>       - name: Install the package
+>         run: |
+>           cd release-code
+>           pip install -e .
+> 
+>       - name: Create the markdown files
+>         run: |
+>           python generate_doc_markdown.py PYTHON_PACKAGE --exclude=tests,test
+> 
+>       # Step 5: Set version variable
+>       - name: Set version variable
+>         run: |
+>           VERSION=${{ github.event.inputs.test_tag || github.event.release.tag_name }}
+>           echo "VERSION=$VERSION" >> $GITHUB_ENV
+> 
+>       # Step 6: Update switcher.json
+>       - name: Update switcher.json
+>         run: |
+>           SWITCHER_FILE=_static/switcher.json
+>           jq --arg version "$VERSION" \
+>              '. |= [{"name": $version, "version": $version, "url": "https://ORGANIZATION.github.io/REPO/\($version)/"}] + .' \
+>              $SWITCHER_FILE > temp.json && mv temp.json $SWITCHER_FILE
+> 
+>       # Step 7: Build documentation using Sphinx into html
+>       - name: Build documentation
+>         env:
+>           SPHINX_APIDOC_DIR: release-code
+>         run: make html
+> 
+>       # Step 8: Copy built HTML to `docs/latest` and `docs/{version}`
+>       - name: Copy built HTML
+>         run: |
+>           mkdir -p docs/latest
+>           mkdir -p docs/$VERSION
+>           cp -r _build/html/* docs/latest/
+>           cp -r _build/html/* docs/$VERSION/
+> 
+>       # Step 9: Clean up `release-code` directory
+>       - name: Remove release-code directory
+>         run: rm -rf release-code
+> 
+>       # Step 10: Commit and push changes
+>       - name: Commit and push changes
+>         run: |
+>           git config user.name "github-actions[bot]"
+>           git config user.email "github-actions[bot]@users.noreply.github.com"
+>           git add docs/latest docs/$VERSION _static/switcher.json
+>           git commit -m "Update docs for release $VERSION"
+>           git push
+> ```
+
+## 9. Enable Write Permissions for GitHub Actions
+
+Ensure that GitHub Actions have write permissions to the repository following these steps:
+- Go to your repository on GitHub.
+- Navigate to Settings > Actions > General.
+- Scroll to the Workflow permissions section.
+- Select Read and write permissions.
+- Click Save.

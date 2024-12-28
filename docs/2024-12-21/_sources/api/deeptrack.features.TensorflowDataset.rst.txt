@@ -1,0 +1,23 @@
+TensorflowDataset
+=================
+
+.. currentmodule:: deeptrack.features
+
+.. autoclass:: TensorflowDataset
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~TensorflowDataset.get
+      ~TensorflowDataset.get_next_output
+      ~TensorflowDataset.reset_dataset
+      ~TensorflowDataset.take
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: get
+   .. automethod:: get_next_output
+   .. automethod:: reset_dataset
+   .. automethod:: take

@@ -1,0 +1,6 @@
+mie_coefficients
+================
+
+.. currentmodule:: deeptrack.backend.mie
+
+.. autofunction:: mie_coefficients
